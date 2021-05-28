@@ -1,0 +1,73 @@
+menu "ESP32 App-Board Configuration"
+
+config WIFI_SSID
+    string "WiFi SSID"
+	default "myssid"
+	help
+		SSID (network name) for the example to connect to.
+
+config WIFI_PASSWORD
+    string "WiFi Password"
+	default "mypassword"
+	help
+		WiFi password (WPA or WPA2) for the example to use.
+
+		Can be left blank if the network has no security set.
+
+config WIFI_MAXIMUM_RETRY
+	int "Maximum Wifi Connection Retry"
+	default 5
+	help
+		Set the Maximum Retry to connect to desire WIFI Access Point
+
+
+menu "ESP32 App-Azure IoT Configuration"
+
+    config AZ_MQTT_BROKER_PORT
+        int "MQTT Broker Port"
+        default 8883
+        help
+            Add the Port for your MQTT Broker connection to Azure IoT
+
+    config AZ_MQTT_BROKER_HOSTNAME
+        string "Azure IoT Hub Broker Hostname or URL"
+        default "mqtts://mqtt.eclipse.org"
+        help
+            Your Azure IoT Hub host name or URL of mqtt broker to connects to.
+
+    config AZ_BROKER_CERT
+        string "Azure IoT Hub or Broker certificate name"
+        default "az_root_ca.pem"
+        help
+            Please add server certificate name here from server cert file located in certs folder
+
+    config AZ_DEVICE_ID                 
+        string "Enter Your Device ID"
+        default ""
+        help
+            Please enter your device Id to be used with Azure IoTHub.
+
+    config AZ_MODULE_ID                 
+        string "Enter Your Azure IoT Module ID"
+        default ""
+        help
+            Please enter your module Id to be used with Azure IoTHub.
+ 
+    config AZ_DEVICE_SYMMETRIC_KEY                 
+        string "Enter Your Azure IoT Symmetric key"
+        help
+            Please enter your Device Symmetric key to be used with Azure IoTHub.
+
+    
+    
+# Add in other Authentication Options later to be used in CMake for DPS etc #
+# if RT_USING_USER_MAIN
+#    config RT_MAIN_THREAD_STACK_SIZE
+#        int "Set main thread stack size"
+#       default 2048
+#   config RT_MAIN_THREAD_PRIORITY
+#       int "Set main thread priority" 
+#       default 4  if RT_THREAD_PRIORITY_8
+# endif
+
+endmenu
