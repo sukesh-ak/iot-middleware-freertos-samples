@@ -107,7 +107,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     az::iot_middleware::freertos
     LWIP
     SAMPLE::AZUREIOT
-    SAMPLE::TRANSPORT::MBEDTLS)
+    SAMPLE::TRANSPORT::MBEDTLS
+    SAMPLE::SOCKET::LWIP)
 
 add_custom_command(TARGET ${PROJECT_NAME}
     # Run after all other rules within the target have been executed

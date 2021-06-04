@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-set(SAMPLE_AZURE_IOT "sample_azure_iot" CACHE STRING "IoT Sample")
-
 if (NOT BOARD)
     message(FATAL_ERROR "Board is not defined.")
 endif()
@@ -15,6 +13,24 @@ if(NOT (TARGET SAMPLE::AZUREIOT))
     add_library(SAMPLE::AZUREIOT INTERFACE IMPORTED)
     target_sources(SAMPLE::AZUREIOT INTERFACE 
         ${CMAKE_CURRENT_SOURCE_DIR}/sample_azure_iot/sample_azure_iot.c)
+endif()
+
+# Target for freertos tcpip socket
+if(NOT (TARGET SAMPLE::SOCKET::FREERTOSTCPIP))
+    add_library(SAMPLE::SOCKET::FREERTOSTCPIP INTERFACE IMPORTED)
+    target_sources(SAMPLE::SOCKET::FREERTOSTCPIP INTERFACE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/transport/sockets_wrapper_freertos_tcpip.c)
+    target_include_directories(SAMPLE::SOCKET::FREERTOSTCPIP INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/transport)
+endif()
+
+# Target for lwip based socket
+if(NOT (TARGET SAMPLE::SOCKET::LWIP))
+    add_library(SAMPLE::SOCKET::LWIP INTERFACE IMPORTED)
+    target_sources(SAMPLE::SOCKET::LWIP INTERFACE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/transport/sockets_wrapper_lwip.c)
+    target_include_directories(SAMPLE::SOCKET::LWIP INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/transport)
 endif()
 
 # Target for transport using Mbedtls
@@ -30,16 +46,10 @@ if(NOT (TARGET SAMPLE::TRANSPORT::MBEDTLS))
 endif()
 
 # Add board specific demo
-if(BOARD_L STREQUAL "b-l475e-iot01a")
-    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/ST/${BOARD_L})
-elseif(BOARD_L STREQUAL "stm32h745i_discovery")
-    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/ST/${BOARD_L}/cm7)
-elseif(BOARD_L STREQUAL "mimxrt1060")
-    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/NXP/${BOARD_L})
-elseif(BOARD_L STREQUAL "linux")
-    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/PC/${BOARD_L})
+if(BOARD_L STREQUAL "stm32h745i_discovery")
+    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/${VENDOR}/${BOARD_L}/cm7)
 else()
-    message("sample not supported for : ${BOARD} ")
+    set(BOARD_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/projects/${VENDOR}/${BOARD_L})
 endif()
 
 add_subdirectory(${BOARD_SOURCE_PATH})

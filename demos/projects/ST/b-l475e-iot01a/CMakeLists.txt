@@ -7,8 +7,6 @@ find_package(CMSIS COMPONENTS STM32L475VG REQUIRED)
 find_package(HAL COMPONENTS STM32L475VG REQUIRED)
 find_package(BSP COMPONENTS STM32L475E-IOT01 REQUIRED)
 
-set(MCU_C_FLAGS "-mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard" CACHE INTERNAL "MCU build flags")
-
 # set parent scope path
 set(BOARD_DEMO_CONFIG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/config CACHE INTERNAL "Config path")
 set(BOARD_DEMO_FREERTOS_PORT_PATH ${FreeRTOS_ARM_CM4F_PATH} CACHE INTERNAL "FreeRTOS Port used ")

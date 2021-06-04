@@ -22,8 +22,7 @@ file(GLOB STCODE_SOURCES st_code/*.c)
 file(GLOB LWIP_PORT_SOURCES
     st_code/lwip/App/*.c
     st_code/lwip/Target/*.c
-    st_code/lwip/system/*.c
-    ../../../../common/transport/sockets_wrapper_lwip.c)
+    st_code/lwip/system/*.c)
 
 set(PROJECT_SOURCES
     ${LWIP_PORT_SOURCES}
@@ -45,6 +44,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     FreeRTOSPlus::Utilities::backoff_algorithm
     FreeRTOSPlus::Utilities::logging
     FreeRTOSPlus::ThirdParty::mbedtls
+    LWIP
     HAL::STM32::H7::M7::RCC
     HAL::STM32::H7::M7::RCCEx
     HAL::STM32::H7::M7::SPI
@@ -62,11 +62,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     CMSIS::STM32::H745XI::M7
     STM32::NoSys
     az::iot_middleware::freertos
-    LWIP
     HAL::STM32::H7::M7::ETH
     BSP::STM32::H7::M7::LAN8742
     SAMPLE::AZUREIOT
-    SAMPLE::TRANSPORT::MBEDTLS)
+    SAMPLE::TRANSPORT::MBEDTLS
+    SAMPLE::SOCKET::LWIP)
 
 add_custom_command(TARGET ${PROJECT_NAME}
     # Run after all other rules within the target have been executed
