@@ -234,22 +234,6 @@ void vAssertCalled( const char * pcFile,
 }
 /*-----------------------------------------------------------*/
 
-UBaseType_t uxRand( void )
-{
-    const uint32_t ulMultiplier = 0x015a4e35UL, ulIncrement = 1UL;
-
-    /*
-     * Utility function to generate a pseudo random number.
-     *
-     * !!!NOTE!!!
-     * This is not a secure method of generating a random number.  Production
-     * devices should use a True Random Number Generator (TRNG).
-     */
-    ulNextRand = ( ulMultiplier * ulNextRand ) + ulIncrement;
-    return( ( int ) ( ulNextRand >> 16UL ) & 0x7fffUL );
-}
-/*-----------------------------------------------------------*/
-
 static void prvSRand( UBaseType_t ulSeed )
 {
     /* Utility function to seed the pseudo random number generator. */
@@ -336,7 +320,7 @@ extern uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
     ( void ) ulDestinationAddress;
     ( void ) usDestinationPort;
 
-    return uxRand();
+    return configRAND32();
 }
 /*-----------------------------------------------------------*/
 
@@ -351,7 +335,7 @@ extern uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
  */
 BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber )
 {
-    *pulNumber = uxRand();
+    *pulNumber = configRAND32();
     return pdTRUE;
 }
 /*-----------------------------------------------------------*/
