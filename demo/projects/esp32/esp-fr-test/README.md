@@ -4,23 +4,18 @@ Starts a FreeRTOS task to print "Hello World" and send to Azure IoT from ESP32.
 
 (See the README.md file in the upper level directory of repositoryy for more information about the various examples.)
 
-## How to use example
-
-
 
 ### Introduction
 In this repository, you will find:
 
-1. Azure samples for the Azure IoT for FreeRTOS Espressif boards located in the `samples` folder.
-1. Azure IoT SDK components will need to be or the ESP stable version located in the `components` folder. These components can be used in any ESP project which desires to connect to Azure IoT.
- Two versions of the component are provided within this repository:
-	* Azure IoT SDK without PnP 
-	* Azure IoT SDK with PnP (preview)
->If you are a beginner with Azure IoT or Espressif boards, please look at the **[Key Concepts](#key-concepts)** section below.
+1. Azure samples for the Azure IoT for FreeRTOS Espressif boards located in the `projects` folder.
+1. For the ESP32 sample, the Azure IoT FreeRTOS middleware SDK will need to be placed into the `components` folder of the project. The provided components CMakeLists.txt is provided that will register and compile the Azure IoT FreeRTOS Middleware component with the IDF build system. 
+
+>If you are a beginner with Azure IoT or Espressif boards, please look at the **[Key Concepts](#key-concepts)** section below for more information. 
 
 In addition to the current ESP32 and ESP8266 hardware offerings, Espressif now offers the [ESP32 Azure IoT Board](https://www.espressif.com/en/products/hardware/esp32-azure-kit), a development board that includes key sensors, OLED screen, and support for Wi-Fi & Bluetooth protocols. More information about this Azure certified board is available in the [Azure IoT catalog](https://catalog.azureiotsolutions.com/details?title=AzureKit-ESP32&source=all-devices-page).
 
->For any questions or suggestions, please open an issue and 
+>For any questions or suggestions on this sample or repo, please open an issue. 
 
 ### Table of Contents
 * [Prerequisites](#prerequisites) - Required items to run samples
@@ -34,8 +29,11 @@ In addition to the current ESP32 and ESP8266 hardware offerings, Espressif now o
 Sample|Description
 ---|---|
 [esp-freertos](project/esp-freertos)|Send telemetry data from the ESP32 Azure device to Azure IoT Hub
+## TO-DO Add other samples and links here when merged. 
 
-The projects in the samples folder follow the folder structure specified by Espressif for ESP-IDF projects. See more information about ESP-IDF and the ESP-IDF build system in the [Key Concepts](#key-concepts) section.
+The projects in the samples folder show how to leverage the Azure IoT FreeRTOS middleware with varying boards.  Please note, the folder structure of the ESP Sample is in line with the folder structure specified by Espressif for ESP-IDF projects. 
+
+See more information about ESP-IDF and the ESP-IDF build system in the [Key Concepts](#key-concepts) section.
 
 ## Prerequisites
 
@@ -43,7 +41,7 @@ The projects in the samples folder follow the folder structure specified by Espr
     - Activate a [free 30-day trial Microsoft Azure account](https://azure.microsoft.com/free/).
     - Claim your [Azure credit](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/) if you are MSDN or Visual Studio subscriber.
 1. **Azure IoT Hub**: An active Azure IoT Hub  
-3. **ESP32/ESP8266 device**: An Espressif development board which is registered in Azure IoT Hub as a device.
+3. **ESP32 device**: An Espressif development board which is registered in Azure IoT Hub as a device.
 
 >If you're not familiar with Azure IoT or need help setting up an Azure IoT Hub, please see **[Key Concepts](#key-concepts)** section.
 
