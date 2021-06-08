@@ -1,17 +1,12 @@
 # Hello Azure FreeRTOS Example
 
-Starts a FreeRTOS task to print "Hello World" to Azure IoT.
+Starts a FreeRTOS task to print "Hello World" and send to Azure IoT from ESP32.
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+(See the README.md file in the upper level directory of repositoryy for more information about the various examples.)
 
 ## How to use example
 
-Follow detailed instructions provided specifically for this example. 
-e
-Select the instructions depending on Espressif chip installed on your development board:
 
-- [ESP32 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/index.html)
-- [ESP32-S2 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/index.html)
 
 ### Introduction
 In this repository, you will find:
@@ -69,11 +64,8 @@ Using Windows Subsystem Linux (WSL):
 *ESP32:*
 You can install the ESP32 toolchain and ESP-IDF on your windows machine using WSL. Start Windows Subsystem for Linux by typing `WSL` in your start menu and running [this setup script](./install-script/esp-setup.sh).
 
-*ESP8266:*
-When choosing to install the ESP8266 toolchain and SDK using WSL, you should start the Windows Subsystem for Linux by typing `WSL` and run [this setup script](./install-script/esp-8266-setup.sh) instead.
-
 For instructions on running the setup scripts, please review the details provided [here](./install-script/readme.md).
-*This is the recommended approach for novice ESP32 and ESP8266 developers using these samples.*
+*This is the recommended approach for novice ESP32 using these samples.
 
 >For more information on setting up WSL on Windows 10 [see how to setup WSL on Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
