@@ -17,7 +17,7 @@
 #include "sdkconfig.h"
 
 #include "esp_fr_common.h"
-//#include "azure_hub_client.h"
+#include "azure_esp_iot_task.h"
 
 /* Azure Provisioning/IoTHub library includes */
 #include "azure_iot_hub_client.h"
