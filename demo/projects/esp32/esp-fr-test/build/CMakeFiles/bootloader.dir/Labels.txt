@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/CMakeFiles/bootloader
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/CMakeFiles/bootloader.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/CMakeFiles/bootloader-complete.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/mnt/c/Tara/Code/iot-middleware-freertos-samples/demo/projects/esp32/esp-fr-test/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule

@@ -1,0 +1,5 @@
+source "/mnt/c/Tara/Code/esp/stable/esp-idf/components/efuse/Kconfig"
+source "/mnt/c/Tara/Code/esp/stable/esp-idf/components/esp32/Kconfig"
+source "/mnt/c/Tara/Code/esp/stable/esp-idf/components/esp_common/Kconfig"
+source "/mnt/c/Tara/Code/esp/stable/esp-idf/components/log/Kconfig"
+source "/mnt/c/Tara/Code/esp/stable/esp-idf/components/spi_flash/Kconfig"

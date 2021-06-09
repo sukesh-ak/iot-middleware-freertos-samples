@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "azure_iot_mqtt.h": "c"
+    }
+}
