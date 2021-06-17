@@ -2,10 +2,9 @@
 
 (See the README.md file in the upper level 'examples' directory for more information about examples.)
 
-This example connects to the broker `mqtt.eclipse.org` using ssl transport and as a demonstration subscribes/unsubscribes and send a message on certain topic.
-(Please note that the public broker is maintained by the community so may not be always available, for details please see this [disclaimer](https://iot.eclipse.org/getting-started/#sandboxes))
+This example connects to the Azure IoT broker using ssl transport and as a demonstration subscribes/unsubscribes and send a message on certain topic.
 
-It uses FreeRTOS coreMQTT library which implements mqtt client to connect to mqtt broker.
+It uses Azure IoT FreeRTOS middleware library which leverages the coreMQTT library. CoreMQTT is implemented as an mqtt client to connect to the IoT Hub MQTT broker.
 
 ## How to use example
 
@@ -19,14 +18,10 @@ This example can be executed on any ESP32 board, the only required interface is 
 * Configure Wi-Fi or Ethernet under "Example Connection Configuration" menu. See "Establishing Wi-Fi or Ethernet Connection" section in [examples/protocols/README.md](../../README.md) for more details.
 * When using Make build system, set `Default serial port` under `Serial flasher config`.
 
-PEM certificate for this example could be extracted from an openssl `s_client` command connecting to mqtt.eclipse.org.
-In case a host operating system has `openssl` and `sed` packages installed, one could execute the following command to download and save the root certificate to a file (Note for Windows users: Both Linux like environment or Windows native packages may be used).
+PEM certificate for this example is the Azure RooTCA Pem file. The file is located in the certs directory and can be configured or changed by placing the PEM file into the folder and entering the exact name of the PEM file when configurating project via idf.py menuconfig.
 ```
-echo "" | openssl s_client -showcerts -connect mqtt.eclipse.org:8883 | sed -n "1,/Root/d; /BEGIN/,/END/p" | openssl x509 -outform PEM >mqtt_eclipse_org.pem
-```
-Please note that this is not a general command for downloading a root certificate for an arbitrary host;
-this command works with mqtt.eclipse.org as the site provides root certificate in the chain, which then could be extracted
-with text operation.
+
+Please note that a root certificate that works with Iot Hub should be used that will be  extracted from folder in binary form.
 
 ### Build and Flash
 
@@ -49,10 +44,7 @@ I (6621) example_connect: Got IPv4 event: Interface "example_connect: sta" addre
 I (6631) example_connect: Connected to example_connect: sta
 I (6631) example_connect: - IPv4 address: 172.168.30.217
 I (6641) example_connect: - IPv6 address: fe80:0000:0000:0000:260a:c4ff:fed8:f7f8, type: ESP_IP6_ADDR_IS_LINK_LOCAL
-[INFO] [MQTTDemo] [prvConnectToServerWithBackoffRetries:508] Creating a TLS connection to mqtt.eclipse.org:8883.
-
-I (8671) tls_freertos: (Network connection 0x3ffc6d70) Connection to mqtt.eclipse.org established.
-[INFO] [MQTTDemo] [prvMQTTDemoTask:407] Creating an MQTT connection to mqtt.eclipse.org.
+[INFO] [MQTTDemo] [prvConnectToServerWithBackoffRetries:508] Creating a TLS connection 
 
 [INFO] [MQTTDemo] [prvCreateMQTTConnectionWithBroker:585] An MQTT connection is established with mqtt.eclipse.org.
 [INFO] [MQTTDemo] [prvMQTTSubscribeWithBackoffRetries:643] Attempt to subscribe to the MQTT topic testClient/example/topic.
@@ -200,15 +192,3 @@ Incoming Publish Message : Hello World!
 [INFO] [MQTTDemo] [prvMQTTDemoTask:476] Short delay before starting the next iteration....
 ```
 
-## Size Information on ESP-IDF v4.3
-
-```
-Total sizes:
- DRAM .data size:   17356 bytes
- DRAM .bss  size:   16824 bytes
-Used static DRAM:   34180 bytes ( 146556 available, 18.9% used)
-Used static IRAM:   87734 bytes (  43338 available, 66.9% used)
-      Flash code:  579803 bytes
-    Flash rodata:  120888 bytes
-Total image size:~ 805781 bytes (.bin may be padded larger)
-```
