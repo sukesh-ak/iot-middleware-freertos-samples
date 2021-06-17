@@ -43,7 +43,7 @@
 
 /* Logging configuration for the MQTT library. */
 #ifndef LIBRARY_LOG_NAME
-    #define LIBRARY_LOG_NAME    "MQTT"
+    #define LIBRARY_LOG_NAME    "AZ_MQTT"
 #endif
 
 #ifndef LIBRARY_LOG_LEVEL

@@ -18,13 +18,14 @@
 
 #include "esp_log.h"
 
-static const char *TAG = "MQTTS_EXAMPLE";
+static const char *TAG = "AZ_ESP_MQTT";
 
 /*
  * Prototypes for the demos that can be started from this project.  Note the
  * MQTT demo is not actually started until the network is already.
  */
-extern void vStartSimpleMQTTDemo( void );
+//extern void vStartSimpleMQTTDemo( void );
+extern void vStartDemoTask( void );
 
 void app_main()
 {
@@ -45,5 +46,6 @@ void app_main()
      */
     ESP_ERROR_CHECK(example_connect());
 
-    vStartSimpleMQTTDemo();
+    // vStartSimpleMQTTDemo();
+    vStartDemoTask();
 }

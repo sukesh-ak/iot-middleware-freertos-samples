@@ -9,4 +9,4 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(tls_basic)
 
 message(STATUS "project register")
-target_add_binary_data(tls_basic.elf "main/mqtt_eclipse_org.pem" TEXT)
+target_add_binary_data(tls_basic.elf "certs/${CONFIG_IOTHUB_ROOTCA_PEM}" TEXT)
