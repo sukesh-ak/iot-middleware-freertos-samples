@@ -19,7 +19,6 @@ This example can be executed on any ESP32 board, the only required interface is 
 * When using Make build system, set `Default serial port` under `Serial flasher config`.
 
 PEM certificate for this example is the Azure RooTCA Pem file. The file is located in the certs directory and can be configured or changed by placing the PEM file into the folder and entering the exact name of the PEM file when configurating project via idf.py menuconfig.
-```
 
 Please note that a root certificate that works with Iot Hub should be used that will be  extracted from folder in binary form.
 
