@@ -21,7 +21,7 @@
 static const char *TAG = "AZ_ESP_MQTT";
 
 /*
- * Prototypes for the demos that can be started from this project.  Note the
+ * Prototypes for the demos that can be started from this project. Note the
  * MQTT demo is not actually started until the network is already.
  */
 //extern void vStartSimpleMQTTDemo( void );
