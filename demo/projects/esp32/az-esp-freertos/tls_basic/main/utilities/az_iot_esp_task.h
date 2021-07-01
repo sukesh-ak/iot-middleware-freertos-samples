@@ -1,6 +1,8 @@
 #ifndef AZ_IOT_ESP_TASK_H
 #define AZ_IOT_ESP_TASK_H
 
+#include "tls_freertos.h"
+
 /**
  * @brief The maximum number of retries for network operation with server.
  */
@@ -67,6 +69,7 @@
  * @brief Use for blocking the call forever.
  */
 #define sampleazureiotWAIT_FOREVER                            ( uint32_t )0xFFFFFFFF
+
 
 /************************************************************************************/
 /*-----------------------------------------------------------*/

@@ -21,7 +21,9 @@
 #include "exponential_backoff.h"
 
 /* Transport interface implementation include header for TLS. */
-#include "tls_freertos.h"
+// #include "tls_freertos.h"
+
+#include "crypto.h"
 
 /*-----------------------------------------------------------*/
 
@@ -56,6 +58,78 @@
 extern const uint8_t az_iothub_org_pem_start[] asm("_binary_az_root_ca_pem_start");
 extern const uint8_t az_iothub_org_pem_end[]   asm("_binary_az_root_ca_pem_end");
 
+static AzureIoTHubClient_t xAzureIoTHubClient;
+
+/*-----------------------------------------------------------*/
+
+/**
+ * @brief Static buffer used to hold MQTT messages being sent and received.
+ */
+static uint8_t ucSharedBuffer[ democonfigNETWORK_BUFFER_SIZE ];
+
+/**
+ * @brief Global start unix time
+ */
+static uint64_t ulGlobalEntryTime = 1639093301;
+
+
+static uint8_t ucPropertyBuffer[ 32 ];
+
+
+static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
+                                   void * pvContext )
+{
+    ( void ) pvContext;
+
+    LogInfo( ( "Cloud message payload : %.*s \r\n",
+               pxMessage->ulPayloadLength,
+               (char*)pxMessage->pvMessagePayload ) );
+}
+
+static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
+                                   void * pvContext )
+{
+    LogInfo( ( "Method payload : %.*s \r\n",
+               pxMessage->ulPayloadLength,
+               (char*)pxMessage->pvMessagePayload ) );
+
+    AzureIoTHubClient_t * xHandle = ( AzureIoTHubClient_t * ) pvContext;
+
+    if( AzureIoTHubClient_SendMethodResponse( xHandle, pxMessage, 200,
+                                              NULL, 0 ) != eAzureIoTHubClientSuccess )
+    {
+        LogInfo( ( "Error sending method response\r\n" ) );
+    }
+}
+
+static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
+                                        void * pvContext )
+{
+    ( void ) pvContext;
+
+    switch( pxMessage->xMessageType )
+    {
+        case eAzureIoTHubTwinGetMessage:
+            LogInfo( ( "Device twin document GET received" ) );
+            break;
+
+        case eAzureIoTHubTwinReportedResponseMessage:
+            LogInfo( ( "Device twin reported property response received" ) );
+            break;
+
+        case eAzureIoTHubTwinDesiredPropertyMessage:
+            LogInfo( ( "Device twin desired property received" ) );
+            break;
+
+        default:
+            LogError( ( "Unknown twin message" ) );
+    }
+
+    LogInfo( ( "Twin document payload : %.*s \r\n",
+               pxMessage->ulPayloadLength,
+               (char*)pxMessage->pvMessagePayload ) );
+}
+
 /***************************************************************************************/
 
 /*-----------------------------------------------------------*/
@@ -75,7 +149,7 @@ static void prvAzureDemoTask( void * pvParameters )
     AzureIoTTransportInterface_t xTransport;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
-    TlsTransportParams_t xTlsTransportParams = { 0 };
+    // TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTHubClientResult_t xResult;
     uint32_t ulStatus;
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
@@ -112,7 +186,7 @@ static void prvAzureDemoTask( void * pvParameters )
         }
     #endif /* democonfigENABLE_DPS_SAMPLE */
 
-    xNetworkContext.pParams = &xTlsTransportParams;
+    // xNetworkContext.pParams = &xTlsTransportParams;
 
     for( ; ; )
     {
@@ -262,7 +336,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                       uint32_t * pulIothubDeviceIdLength )
     {
         NetworkContext_t xNetworkContext = { 0 };
-        TlsTransportParams_t xTlsTransportParams = { 0 };
+        // TlsTransportParams_t xTlsTransportParams = { 0 };
         TlsTransportStatus_t xNetworkStatus;
         AzureIoTProvisioningClientResult_t xResult;
         AzureIoTTransportInterface_t xTransport;
@@ -270,7 +344,7 @@ static void prvAzureDemoTask( void * pvParameters )
         uint32_t ucSamplepIothubDeviceIdLength = sizeof( ucSampleIotHubDeviceId );
 
         /* Set the pParams member of the network context with desired transport. */
-        xNetworkContext.pParams = &xTlsTransportParams;
+        // xNetworkContext.pParams = &xTlsTransportParams;
 
         /****************************** Connect. ******************************/
 
