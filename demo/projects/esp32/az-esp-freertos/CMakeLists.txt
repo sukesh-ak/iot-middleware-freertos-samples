@@ -21,7 +21,7 @@ list(APPEND includes
     "port/logging"
     "port/platform"
     "port/network_transport"
-    "port/config"
+    "config"
     #"azure-iot-middleware-freertos/source/include"
     #"azure-iot-middleware-freertos/source/interface"
     #"azure-iot-middleware-freertos/libraries/coreMQTT/source/include"
@@ -58,10 +58,11 @@ message(STATUS "freertos-${esp_freertos_path}")
 include_directories("port/logging")
 include_directories("port/platform")
 
-set(freertos_directory ${esp_freertos_path} CACHE PATH "esp freertos")
-set(config_directory ${CMAKE_CURRENT_LIST_DIR}/port/config CACHE PATH "esp config")
-set(freertos_port_directory ${esp_freertos_path}/xtensa/include/freertos CACHE PATH "esp port")
+message(STATUS "cmake dir: ${CMAKE_CURRENT_LIST_DIR}")
 
+set(FREERTOS_DIRECTORY ${esp_freertos_path} CACHE PATH "esp freertos")
+set(CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/config CACHE PATH "esp config")
+set(FREERTOS_PORT_DIRECTORY ${esp_freertos_path}/xtensa/include/freertos CACHE PATH "esp port")
 
 add_subdirectory(azure-iot-middleware-freertos)
 #target_link_libraries(${COMPONENT_LIB} PUBLIC azure-az-iot-middleware-freertos)

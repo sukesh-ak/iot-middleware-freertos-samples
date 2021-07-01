@@ -8,10 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Style Check
+      run: .github/scripts/code_style.sh check
     - name: Submodules Init
       uses: snickerbockers/submodules-init@v4
     - name: Configure
       run: .github/scripts/install_software.sh; sudo .github/scripts/init_vm_network.sh
+    - name: Fetch FreeRTOS
+      run: .github/scripts/fetch_freertos.sh
+    - name: Build with Clang
+      run: .github/scripts/clang_build.sh
     - name: Check-in Tests
       run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
                          export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};

@@ -5,7 +5,7 @@
 #define DEMO_CONFIG_H
 
 /* FreeRTOS config include. */
-#include "FreeRTOSConfig.h"
+#include "freertos/FreeRTOSConfig.h"
 
 /**************************************************/
 /******* DO NOT CHANGE the following order ********/
@@ -43,6 +43,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #endif
 
 #include "logging_stack.h"
+#include "platform.h"
 
 /************ End of logging configuration ****************/
 

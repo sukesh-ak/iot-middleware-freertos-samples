@@ -21,25 +21,39 @@ config WIFI_MAXIMUM_RETRY
 		Set the Maximum Retry to connect to desire WIFI Access Point
 
 config MQTT_CLIENT_IDENTIFIER
-    string "The MQTT client identifier used in this example"
-	default "testClient"
+    string "The MQTT client identifier used for this device"
+	default "esp32testclient"
 	help
         The MQTT client identifier used in this example. Each client identifier must be unique.
         so edit as required to ensure that no two clients connecting to the same broker use the same client identifier.
 
 config MQTT_BROKER_ENDPOINT
-    string "Endpoint of the MQTT broker to connect to"
-    default "mqtt.eclipse.org"
+    string "HostName aka Endpoint of the Azure IoT Hub/MQTT broker to connect to"
+    default "iothub.azure.com"
     help
-        This example can be run with any MQTT broker, that supports server authentication.
+        This should be the IoT Hub HostName from targeted IoT Hub.
 
 config MQTT_BROKER_PORT
-    int "Port of the MQTT broker use"
+    int "Port of the AZure IoT Hub MQTT broker to be used"
     default 8883
     help
         In general, port 8883 is for secured MQTT connections.
         Port 443 requires use of the ALPN TLS extension with the ALPN protocol name.
         When using port 8883, ALPN is not required.
+
+config IOTHUB_ROOTCA_PEM
+    string "Exact file name of the Root CA for IoT Hub placed in the certs folder"
+    default "az_root_ca.pem"
+    help
+        Enter the name of the Root CA pem file for Azure IoT Hub.
+        This file should be placed in the certs folder of the project.
+        The name entered should be exactly the same as name of file in the certs folder.
+
+config IOTHUB_DEVICE_SYMMETRIC_KEY
+    string "The Device Symmetric Key from Azure IoT Hub for authentication"
+    default ""
+    help 
+        Enter the symmetric key from the targeted IoT Hub subscription: 
 
 config MQTT_OPTION_SNI
     int "An option to disable Server Name Indication"
@@ -51,7 +65,7 @@ config MQTT_OPTION_SNI
         SNI should be enabled whenever possible.
 
 config MQTT_EXAMPLE_STACKSIZE
-    int "Set the stack size of the example task"
+    int "Set the stack size of the esp32 task for telemetry"
     range 5120 8192
     default 5120
     help

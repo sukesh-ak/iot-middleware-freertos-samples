@@ -38,17 +38,17 @@
  * 3. Include the header file "logging_stack.h", if logging is enabled for MQTT.
  */
 
-#include "logging_levels.h"
-#include "logging_stack.h"
+// #include "logging_levels.h"
+// #include "logging_stack.h"
 
-/* Logging configuration for the MQTT library. */
-#ifndef LIBRARY_LOG_NAME
-    #define LIBRARY_LOG_NAME    "AZ_MQTT"
-#endif
+// /* Logging configuration for the MQTT library. */
+// #ifndef LIBRARY_LOG_NAME
+//     #define LIBRARY_LOG_NAME    "AZ_MQTT"
+// #endif
 
-#ifndef LIBRARY_LOG_LEVEL
-    #define LIBRARY_LOG_LEVEL    LOG_INFO
-#endif
+// #ifndef LIBRARY_LOG_LEVEL
+//     #define LIBRARY_LOG_LEVEL    LOG_INFO
+// #endif
 
 /**
  * @brief Determines the maximum number of MQTT PUBLISH messages, pending

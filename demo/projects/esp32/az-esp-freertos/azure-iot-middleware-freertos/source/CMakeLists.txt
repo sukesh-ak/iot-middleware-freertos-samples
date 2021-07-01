@@ -8,8 +8,6 @@ set(CMAKE_C_STANDARD 99)
 # Add modules and include compiler options/switches
 include(../cmake/build/compile_options.cmake)
 
-message(STATUS "here")
-
 # Add coreMQTT Lib
 add_library(coremqtt
   ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreMQTT/source/core_mqtt_serializer.c
