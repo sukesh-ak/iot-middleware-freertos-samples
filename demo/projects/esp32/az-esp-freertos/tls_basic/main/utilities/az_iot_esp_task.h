@@ -90,14 +90,14 @@ static uint64_t prvGetUnixTime( void );
  */
 static void prvAzureDemoTask( void * pvParameters );
 
-static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
+/*static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
                                    void * pvContext );
 
 static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
                                    void * pvContext );
 
 static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
-                                        void * pvContext );
+                                        void * pvContext );*/
 
 /**
  * @brief Setup credentials to MQTT broker.
