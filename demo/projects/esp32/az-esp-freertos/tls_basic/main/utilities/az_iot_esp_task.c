@@ -468,3 +468,21 @@ static uint64_t prvGetUnixTime( void )
 }
 
 /*-----------------------------------------------------------*/
+
+/**************************************************************************/
+static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCredentials )
+{
+    pxNetworkCredentials->disableSni = democonfigDISABLE_SNI;
+    /* Set the credentials for establishing a TLS connection. */
+    pxNetworkCredentials->pRootCa = ( const unsigned char * ) az_iothub_org_pem_start;
+    pxNetworkCredentials->rootCaSize = az_iothub_org_pem_end - az_iothub_org_pem_start;
+    #ifdef democonfigCLIENT_CERTIFICATE_PEM //Change this later to use KConfig and asm binary 
+        pxNetworkCredentials->pClientCert = ( const unsigned char * ) democonfigCLIENT_CERTIFICATE_PEM;
+        pxNetworkCredentials->clientCertSize = sizeof( democonfigCLIENT_CERTIFICATE_PEM );
+        pxNetworkCredentials->pPrivateKey = ( const unsigned char * ) democonfigCLIENT_PRIVATE_KEY_PEM;
+        pxNetworkCredentials->privateKeySize = sizeof( democonfigCLIENT_PRIVATE_KEY_PEM );
+    #endif
+
+    return 0;
+}
+
