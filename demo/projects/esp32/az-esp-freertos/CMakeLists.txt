@@ -21,6 +21,7 @@ list(APPEND includes
     "port/logging"
     "port/platform"
     "port/network_transport"
+    "port/crypto"
     "config"
     #"azure-iot-middleware-freertos/source/include"
     #"azure-iot-middleware-freertos/source/interface"
@@ -43,6 +44,7 @@ list(APPEND srcs_dirs
     "port/exponential_backoff/"
     "port/platform"
     "port/network_transport"
+    "port/crypto"
     #"azure-iot-middleware-freertos/source"
     #"azure-iot-middleware-freertos/libraries/coreMQTT/source"
     )
@@ -50,7 +52,7 @@ list(APPEND srcs_dirs
 idf_component_register( SRC_DIRS ${srcs_dirs}
                         INCLUDE_DIRS ${includes}
                         PRIV_INCLUDE_DIRS ${priv_includes}
-                        REQUIRES lwip nghttp mbedtls tcp_transport
+                        REQUIRES lwip nghttp mbedtls tcp_transport soc
                       )
 idf_component_get_property(esp_freertos_path freertos COMPONENT_DIR)
 message(STATUS "freertos-${esp_freertos_path}")
