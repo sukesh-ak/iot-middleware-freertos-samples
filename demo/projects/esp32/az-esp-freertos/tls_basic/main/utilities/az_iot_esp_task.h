@@ -21,7 +21,7 @@
 #define sampleazureiotRETRY_BACKOFF_BASE_MS                   ( 500U )
 
 /**
- * @brief Timeout for receiving CONNACK packet in milliseconds.
+ *    @brief Timeout for receiving CONNACK packet in milliseconds.
  */
 #define sampleazureiotCONNACK_RECV_TIMEOUT_MS                 ( 1000U )
 
@@ -71,6 +71,8 @@
 #define sampleazureiotWAIT_FOREVER                            ( uint32_t )0xFFFFFFFF
 
 
+
+
 /************************************************************************************/
 /*-----------------------------------------------------------*/
 
@@ -93,14 +95,14 @@ static uint64_t prvGetUnixTime( void );
  */
 static void prvAzureDemoTask( void * pvParameters );
 
-/*static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
+static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
                                    void * pvContext );
 
 static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
                                    void * pvContext );
 
 static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
-                                        void * pvContext );*/
+                                        void * pvContext );
 
 /**
  * @brief Setup credentials to MQTT broker.
@@ -145,6 +147,8 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
                                       uint32_t * pulIothubHostnameLength,
                                       uint8_t ** ppucIothubDeviceId,
                                       uint32_t * pulIothubDeviceIdLength );
+
+void vStartDemoTask( void );
 
 #endif /* democonfigENABLE_DPS_SAMPLE */
 

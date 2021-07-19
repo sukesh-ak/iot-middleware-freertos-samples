@@ -9,21 +9,20 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-/* Demo Specific configs. */
-#include "demo_config.h"
-#include "az_iot_esp_task.h"
-
 /* Azure Provisioning/IoTHub library includes */
 #include "azure_iot_hub_client.h"
 #include "azure_iot_provisioning_client.h"
+
+/* Demo Specific configs. */
+#include "demo_config.h"
+#include "esp_crypto.h"
+#include "az_iot_esp_task.h"
 
 /* Exponential backoff retry include. */
 #include "exponential_backoff.h"
 
 /* Transport interface implementation include header for TLS. */
-// #include "tls_freertos.h"
-
-#include "crypto.h"
+//#include "tls_freertos.h"
 
 /*-----------------------------------------------------------*/
 
@@ -60,76 +59,18 @@ extern const uint8_t az_iothub_org_pem_end[]   asm("_binary_az_root_ca_pem_end")
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 
-/*-----------------------------------------------------------*/
-
 /**
  * @brief Static buffer used to hold MQTT messages being sent and received.
  */
 static uint8_t ucSharedBuffer[ democonfigNETWORK_BUFFER_SIZE ];
+
 
 /**
  * @brief Global start unix time
  */
 static uint64_t ulGlobalEntryTime = 1639093301;
 
-
 static uint8_t ucPropertyBuffer[ 32 ];
-
-
-static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
-                                   void * pvContext )
-{
-    ( void ) pvContext;
-
-    LogInfo( ( "Cloud message payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               (char*)pxMessage->pvMessagePayload ) );
-}
-
-static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
-                                   void * pvContext )
-{
-    LogInfo( ( "Method payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               (char*)pxMessage->pvMessagePayload ) );
-
-    AzureIoTHubClient_t * xHandle = ( AzureIoTHubClient_t * ) pvContext;
-
-    if( AzureIoTHubClient_SendMethodResponse( xHandle, pxMessage, 200,
-                                              NULL, 0 ) != eAzureIoTHubClientSuccess )
-    {
-        LogInfo( ( "Error sending method response\r\n" ) );
-    }
-}
-
-static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
-                                        void * pvContext )
-{
-    ( void ) pvContext;
-
-    switch( pxMessage->xMessageType )
-    {
-        case eAzureIoTHubTwinGetMessage:
-            LogInfo( ( "Device twin document GET received" ) );
-            break;
-
-        case eAzureIoTHubTwinReportedResponseMessage:
-            LogInfo( ( "Device twin reported property response received" ) );
-            break;
-
-        case eAzureIoTHubTwinDesiredPropertyMessage:
-            LogInfo( ( "Device twin desired property received" ) );
-            break;
-
-        default:
-            LogError( ( "Unknown twin message" ) );
-    }
-
-    LogInfo( ( "Twin document payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               (char*)pxMessage->pvMessagePayload ) );
-}
-
 /***************************************************************************************/
 
 /*-----------------------------------------------------------*/
@@ -149,7 +90,7 @@ static void prvAzureDemoTask( void * pvParameters )
     AzureIoTTransportInterface_t xTransport;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
-    // TlsTransportParams_t xTlsTransportParams = { 0 };
+    //TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTHubClientResult_t xResult;
     uint32_t ulStatus;
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
@@ -186,7 +127,7 @@ static void prvAzureDemoTask( void * pvParameters )
         }
     #endif /* democonfigENABLE_DPS_SAMPLE */
 
-    // xNetworkContext.pParams = &xTlsTransportParams;
+    //xNetworkContext.pParams = &xTlsTransportParams;
 
     for( ; ; )
     {
@@ -228,7 +169,7 @@ static void prvAzureDemoTask( void * pvParameters )
         #ifdef democonfigDEVICE_SYMMETRIC_KEY
             xResult = AzureIoTHubClient_SetSymmetricKey( &xAzureIoTHubClient,
                                                          ( const uint8_t * ) democonfigDEVICE_SYMMETRIC_KEY,
-                                                         sizeof( democonfigDEVICE_SYMMETRIC_KEY ) - 1,
+                                                          sizeof( democonfigDEVICE_SYMMETRIC_KEY ) - 1,
                                                          Crypto_HMAC );
             configASSERT( xResult == eAzureIoTHubClientSuccess );
         #endif // democonfigDEVICE_SYMMETRIC_KEY
@@ -336,7 +277,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                       uint32_t * pulIothubDeviceIdLength )
     {
         NetworkContext_t xNetworkContext = { 0 };
-        // TlsTransportParams_t xTlsTransportParams = { 0 };
+        //TlsTransportParams_t xTlsTransportParams = { 0 };
         TlsTransportStatus_t xNetworkStatus;
         AzureIoTProvisioningClientResult_t xResult;
         AzureIoTTransportInterface_t xTransport;
@@ -344,7 +285,7 @@ static void prvAzureDemoTask( void * pvParameters )
         uint32_t ucSamplepIothubDeviceIdLength = sizeof( ucSampleIotHubDeviceId );
 
         /* Set the pParams member of the network context with desired transport. */
-        // xNetworkContext.pParams = &xTlsTransportParams;
+  //xNetworkContext.pParams = &xTlsTransportParams;
 
         /****************************** Connect. ******************************/
 
@@ -355,7 +296,7 @@ static void prvAzureDemoTask( void * pvParameters )
         /* Fill in Transport Interface send and receive function pointers. */
         xTransport.pxNetworkContext = &xNetworkContext;
         xTransport.xSend = TLS_FreeRTOS_send;
-        xTransport.xRecv = TLS_FreeRTOS_Recv;
+        xTransport.xRecv = TLS_FreeRTOS_recv;
 
         /* Initialize MQTT library. */
         xResult = AzureIoTProvisioningClient_Init( &xAzureIoTProvisioningClient,
@@ -472,7 +413,7 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
 {
     TlsTransportStatus_t xNetworkStatus;
     RetryUtilsStatus_t xRetryUtilsStatus = RetryUtilsSuccess;
-    RetryUtilsParams_t xReconnectParams;
+    RetryUtilsParams_t xReconnectParams; 
 
     /* Initialize reconnect attempts and interval. */
     RetryUtils_ParamsReset( &xReconnectParams );
@@ -509,12 +450,12 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
             {
                 LogError( ( "Connection to the broker failed, all attempts exhausted." ) );
             }
-            else if( xRetryUtilsStatus == RetryUtilsSuccess )
+            /*else if( xRetryUtilsStatus == RetryUtilsSuccess )
             {
                 LogWarn( ( "Connection to the broker failed. "
                            "Retrying connection with backoff and jitter." ) );
                 vTaskDelay( pdMS_TO_TICKS( usNextRetryBackOff ) );
-            }
+            }*/
         }
     } while( ( xNetworkStatus != TLS_TRANSPORT_SUCCESS ) && ( xRetryUtilsStatus == RetryUtilsSuccess ) );
 
@@ -558,5 +499,22 @@ static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCred
     #endif
 
     return 0;
+}
+
+/*-----------------------------------------------------------*/
+
+/*
+ * @brief Create the task that demonstrates the AzureIoTHub demo
+ */
+void vStartDemoTask( void )
+{
+    /* This example uses a single application task, which in turn is used to
+     * connect, subscribe, publish, unsubscribe and disconnect from the IotHub */
+    xTaskCreate( prvAzureDemoTask,         /* Function that implements the task. */
+                 "AzureDemoTask",          /* Text name for the task - only used for debugging. */
+                 democonfigDEMO_STACKSIZE, /* Size of stack (in words, not bytes) to allocate for the task. */
+                 NULL,                     /* Task parameter - not used in this case. */
+                 tskIDLE_PRIORITY,         /* Task priority, must be between 0 and configMAX_PRIORITIES - 1. */
+                 NULL );                   /* Used to pass out a handle to the created task - not used in this case. */
 }
 
