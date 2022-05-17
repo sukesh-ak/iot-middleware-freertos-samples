@@ -319,10 +319,15 @@ static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCred
 /*-----------------------------------------------------------*/
 
 char ucManifestBuffer[ 2500 ];
-char * ucManifest = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0.eyJzaGEyNTYiOiJzaDRIcjZSNGxXNEtVRGdDNkJEQUo0dTNZMys1Z0srOXgxQVFSNnBTWEpRPSJ9.dSQKe7CPdj44VUSLlghLy-kSE5gsWEjPTLwdyGsgQTrxfk5fn-AJPe7VR5hVscfClPkI3EVpEbMN8rNDwDQupNnl0fp1phPr6kBj_j30UfRIvvd4lcoVYUABw-s8GhmuxShXrTPJWUSTGlTPlN1PdTvxIaRH2hoaMc6G2mZwoEQyjkAw_jqxXhYqYNXBl94AfcSTxqdGzHuEMfan7utaZgkS5HiGK_OFVlWXYFr3FpxoCcFmQDh-ANZJil25K4lngBuYTE5PgGguAD_ZvDBsyzw99ParYbgYXLk0wGagwPGhu2FANLmQuCsgYtXKt5lFs_hxJGEUTSslod6oXaw0utQlxRWgwMMIKTWAspzAm1XBsbpzB3FCF-97Qg5BzVexsRY3gtmKKp90eM0y5O_PXd7lAooPHf11BfQXJ2TCqcU9SdkPpQ4zZZILy5b2VP8vIgRL-VFwxzdyZpT3639t1oq1fnEtCBi91vLcXPMGq68iI7TrZH3slvTK3lSLlQO7";
-char ucBase64DecodedOne[ 1400 ];
-char ucBase64DecodedTwo[ 60 ];
-char ucBase64DecodedThree[ 400 ];
+char * ucManifest = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0=.eyJzaGEyNTYiOiJzaDRIcjZSNGxXNEtVRGdDNkJEQUo0dTNZMys1Z0srOXgxQVFSNnBTWEpRPSJ9.dSQKe7CPdj44VUSLlghLy-kSE5gsWEjPTLwdyGsgQTrxfk5fn-AJPe7VR5hVscfClPkI3EVpEbMN8rNDwDQupNnl0fp1phPr6kBj_j30UfRIvvd4lcoVYUABw-s8GhmuxShXrTPJWUSTGlTPlN1PdTvxIaRH2hoaMc6G2mZwoEQyjkAw_jqxXhYqYNXBl94AfcSTxqdGzHuEMfan7utaZgkS5HiGK_OFVlWXYFr3FpxoCcFmQDh-ANZJil25K4lngBuYTE5PgGguAD_ZvDBsyzw99ParYbgYXLk0wGagwPGhu2FANLmQuCsgYtXKt5lFs_hxJGEUTSslod6oXaw0utQlxRWgwMMIKTWAspzAm1XBsbpzB3FCF-97Qg5BzVexsRY3gtmKKp90eM0y5O_PXd7lAooPHf11BfQXJ2TCqcU9SdkPpQ4zZZILy5b2VP8vIgRL-VFwxzdyZpT3639t1oq1fnEtCBi91vLcXPMGq68iI7TrZH3slvTK3lSLlQO7";
+char ucBase64DecodedHeader[ 1400 ];
+char ucBase64DecodedPayload[ 60 ];
+char ucBase64DecodedSignature[ 400 ];
+
+char ucBase64DecodedJWKHeader[ 48 ];
+char ucBase64DecodedJWKPayload[ 700 ];
+char ucBase64EncodedJWKPayloadCopyWithEquals[ 700 ];
+char ucBase64DecodedJWKSignature[ 500 ];
 
 AzureIoTResult_t AzureSplitJWS( char * pucJWS,
                                 uint32_t ulJWSLength,
@@ -397,8 +402,6 @@ AzureIoTResult_t AzureIoTSwapURLEncoding( char * pucSignature,
         pucSignature++;
         ulIndex++;
     }
-
-    printf( "Swapped: %.*s\n", ulSignatureLength, hold );
 }
 
 void jws( void )
@@ -412,33 +415,119 @@ void jws( void )
 
     memcpy( ucManifestBuffer, ucManifest, strlen( ucManifest ) );
 
+    /*------------------- Parse and Decode the Manifest Sig ------------------------*/
+
     AzureIoTResult_t xResult = AzureSplitJWS( ucManifestBuffer, strlen( ucManifestBuffer ),
                                               &pucHeader, &ulHeaderLength,
                                               &pucPayload, &ulPayloadLength,
                                               &pucSignature, &ulSignatureLength );
-
-    printf( "JWS Part One\n" );
-    size_t mbedtlsOutSize;
-    int ret = mbedtls_base64_decode( ucBase64DecodedOne, sizeof( ucBase64DecodedOne ), &mbedtlsOutSize, pucHeader, ulHeaderLength );
-    printf( "mbedtls ret: %i\n", ret );
-    printf( "Out Decoded Size: %li\n", mbedtlsOutSize );
-    printf( "%.*s\n\n", ( int ) mbedtlsOutSize, ucBase64DecodedOne );
-
-    printf( "JWS Part Two\n" );
-    size_t outDecodedSizeTwo;
-    ret = mbedtls_base64_decode( ucBase64DecodedTwo, sizeof( ucBase64DecodedTwo ), &outDecodedSizeTwo, pucPayload, ulPayloadLength );
-    printf( "mbedtls Result: 0x%x\n", ret );
-    printf( "Out Decoded Size: %li\n", outDecodedSizeTwo );
-    printf( "%.*s\n\n", ( int ) outDecodedSizeTwo, ucBase64DecodedTwo );
-
-    printf( "JWS Part Three\n" );
     xResult = AzureIoTSwapURLEncoding( pucSignature, ulSignatureLength );
-    size_t outDecodedSizeThree;
-    ret = mbedtls_base64_decode( ucBase64DecodedThree, sizeof( ucBase64DecodedThree ), &outDecodedSizeThree, pucSignature, ulSignatureLength );
-    printf( "Core Result: 0x%x\n", ret );
-    printf( "Out Decoded Size: %li\n", outDecodedSizeThree );
-    printf( "%.*s\n\n", ( int ) outDecodedSizeThree, ucBase64DecodedThree );
 
+    printf( "---JWS Part One---\n" );
+    int32_t outDecodedSizeOne;
+    az_span decodedSpanHeader = az_span_create( ( ucBase64DecodedHeader ), sizeof( ucBase64DecodedHeader ) );
+    az_span encodedHeaderSpan = az_span_create( ( uint8_t * ) pucHeader, ( uint32_t ) ulHeaderLength );
+    az_result xCoreResult = az_base64_decode( decodedSpanHeader, encodedHeaderSpan, &outDecodedSizeOne );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedSizeOne );
+    printf( "%.*s\n\n", ( int ) outDecodedSizeOne, ucBase64DecodedHeader );
+
+    printf( "---JWS Part Two---\n" );
+    int32_t outDecodedSizeTwo;
+    az_span decodedSpanPayload = az_span_create( ( ucBase64DecodedPayload ), sizeof( ucBase64DecodedPayload ) );
+    az_span encodedPayloadSpan = az_span_create( ( uint8_t * ) pucPayload, ( uint32_t ) ulPayloadLength );
+    xCoreResult = az_base64_decode( decodedSpanPayload, encodedPayloadSpan, &outDecodedSizeTwo );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedSizeTwo );
+    printf( "%.*s\n\n", ( int ) outDecodedSizeTwo, ucBase64DecodedPayload );
+
+    printf( "---JWS Part Three---\n" );
+    int32_t outDecodedSizeThree;
+    az_span decodedSpanSignature = az_span_create( ( ucBase64DecodedSignature ), sizeof( ucBase64DecodedSignature ) );
+    az_span encodedSignatureSpan = az_span_create( ( uint8_t * ) pucSignature, ( uint32_t ) ulSignatureLength );
+    xCoreResult = az_base64_decode( decodedSpanSignature, encodedSignatureSpan, &outDecodedSizeThree );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedSizeThree );
+    printf( "%.*s\n\n", ( int ) outDecodedSizeThree, ucBase64DecodedSignature );
+
+
+    /*------------------- Parse JSK JSON Payload ------------------------*/
+
+    AzureIoTJSONReader_t xJSONReader;
+    AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedHeader, outDecodedSizeOne );
+    xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+
+    while( xResult == eAzureIoTSuccess )
+    {
+        if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sjwk", strlen( "sjwk" ) ) )
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            break;
+        }
+        else
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            xResult = AzureIoTJSONReader_SkipChildren( &xJSONReader );
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+        }
+    }
+
+    az_span xJWKManifestSpan = xJSONReader._internal.xCoreReader.token.slice;
+
+    char * pucJWKManifest = az_span_ptr( xJWKManifestSpan );
+    uint32_t ulJWKManifestLength = az_span_size( xJWKManifestSpan );
+    printf( "Parsed out manifest from JSON:\n" );
+    printf( "%.*s\n", ( int ) ulJWKManifestLength, pucJWKManifest );
+
+    /*------------------- Base64 Decode the JWK Payload ------------------------*/
+
+    char * pucJWKHeader;
+    char * pucJWKPayload;
+    char * pucJWKSignature;
+    uint32_t ulJWKHeaderLength;
+    uint32_t ulJWKPayloadLength;
+    uint32_t ulJWKSignatureLength;
+
+    xResult = AzureSplitJWS( pucJWKManifest, ulJWKManifestLength,
+                             &pucJWKHeader, &ulJWKHeaderLength,
+                             &pucJWKPayload, &ulJWKPayloadLength,
+                             &pucJWKSignature, &ulJWKSignatureLength );
+    xResult = AzureIoTSwapURLEncoding( pucJWKSignature, ulJWKSignatureLength );
+
+    printf( "---JWK Part One---\n" );
+    int32_t outDecodedJWKSizeOne;
+    az_span decodedJWKSpan = az_span_create( ( ucBase64DecodedJWKHeader ), sizeof( ucBase64DecodedJWKHeader ) );
+    az_span encodedJWKHeaderSpan = az_span_create( ( uint8_t * ) pucJWKHeader, ( uint32_t ) ulJWKHeaderLength );
+    xCoreResult = az_base64_decode( decodedJWKSpan, encodedJWKHeaderSpan, &outDecodedJWKSizeOne );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedJWKSizeOne );
+    printf( "%.*s\n\n", ( int ) outDecodedJWKSizeOne, ucBase64DecodedJWKHeader );
+
+    printf( "---JWK Part Two---\n" );
+    /* Have to hack in the padded characters */
+    memcpy(ucBase64EncodedJWKPayloadCopyWithEquals, pucJWKPayload, ulJWKPayloadLength);
+    ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength ] = '=';
+    ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength + 1 ] = '=';
+    ulJWKPayloadLength = ulJWKPayloadLength + 2;
+
+    int32_t outDecodedJWKSizeTwo;
+    az_span decodedJWKSpanTwo = az_span_create( ( ucBase64DecodedJWKPayload ), sizeof( ucBase64DecodedJWKPayload ) );
+    az_span encodedJWKPayloadSpan = az_span_create( ( uint8_t * ) ucBase64EncodedJWKPayloadCopyWithEquals, ( uint32_t ) ulJWKPayloadLength );
+    xCoreResult = az_base64_decode( decodedJWKSpanTwo, encodedJWKPayloadSpan, &outDecodedJWKSizeTwo );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedJWKSizeTwo );
+    printf( "%.*s\n\n", ( int ) outDecodedJWKSizeTwo, ucBase64DecodedJWKPayload );
+
+    printf( "---JWK Part Three---\n" );
+    int32_t outDecodedJWKSizeThree;
+    az_span decodedJWKSpanThree = az_span_create( ( ucBase64DecodedJWKSignature ), sizeof( ucBase64DecodedJWKSignature ) );
+    az_span encodedJWKSignatureSpan = az_span_create( ( uint8_t * ) pucJWKSignature, ( uint32_t ) ulJWKSignatureLength );
+    xCoreResult = az_base64_decode( decodedJWKSpanThree, encodedJWKSignatureSpan, &outDecodedJWKSizeThree );
+    printf( "Core Return: 0x%x\n", xCoreResult );
+    printf( "Out Decoded Size: %i\n", outDecodedJWKSizeThree );
+    printf( "%.*s\n\n", ( int ) outDecodedJWKSizeThree, ucBase64DecodedJWKSignature );
+
+    /*------------------- Done (Loop) ------------------------*/
     while( 1 )
     {
     }
