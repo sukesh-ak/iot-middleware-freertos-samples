@@ -102,17 +102,17 @@
  *
  */
 
-#define azureiotaduWORKFLOW_ID_SIZE                             48
-#define azureiotaduWORKFLOW_RETRY_TIMESTAMP_SIZE                80
-#define azureiotaduSTEPS_MAX                                    2
-#define azureiotaduAGENT_FILES_MAX                              2
-#define azureiotaduRESULT_DETAILS_SIZE                          128
-#define azureiotaduDEVICE_INFO_MANUFACTURER_SIZE                16
-#define azureiotaduDEVICE_INFO_MODEL_SIZE                       24
-#define azureiotaduUPDATE_PROVIDER_SIZE                         16
-#define azureiotaduUPDATE_NAME_SIZE                             24
-#define azureiotaduUPDATE_VERSION_SIZE                          10
-#define azureiotaduSTEP_ID_SIZE                                 32
+#define azureiotaduWORKFLOW_ID_SIZE                 48
+#define azureiotaduWORKFLOW_RETRY_TIMESTAMP_SIZE    80
+#define azureiotaduSTEPS_MAX                        2
+#define azureiotaduAGENT_FILES_MAX                  2
+#define azureiotaduRESULT_DETAILS_SIZE              128
+#define azureiotaduDEVICE_INFO_MANUFACTURER_SIZE    16
+#define azureiotaduDEVICE_INFO_MODEL_SIZE           24
+#define azureiotaduUPDATE_PROVIDER_SIZE             16
+#define azureiotaduUPDATE_NAME_SIZE                 24
+#define azureiotaduUPDATE_VERSION_SIZE              10
+#define azureiotaduSTEP_ID_SIZE                     32
 
 /**
  * @brief ADU Update ID.
@@ -290,14 +290,14 @@ typedef struct AzureIoTADUClient
 
 /**
  * @brief Initializes the Azure IoT ADU Agent Client.
- * 
+ *
  * @param[in] pxAduClient            The pointer to the #AzureIoTADUClient_t
  *                                   instance to initialize.
  * @param[in] pxAzureIoTHubClient    A pointer to the #AzureIoTHubClient_t,
  *                                   already initialized.
  * @param[in] pxHTTPTransport        An instance of #AzureIoTTransportInterface_t
  *                                   defining the I/O interface for the internal
- *                                   HTTP client used to download image files.  
+ *                                   HTTP client used to download image files.
  * @param[in] pxAzureIoTHTTPConnectCallback
  *                                  A callback invoked by the ADU client API
  *                                  requesting the socket connection to be
@@ -312,7 +312,7 @@ typedef struct AzureIoTADUClient
  *                                  update and its steps.
  * @param[in] pucAduContextBuffer   A pointer to the memory buffer to be used
  *                                  for parsing ADU service requests and
- *                                  composing the ADU agent reports.  
+ *                                  composing the ADU agent reports.
  * @param[in] ulAduContextBuffer    The size of `pucAduContextBuffer`.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
@@ -350,8 +350,8 @@ AzureIoTResult_t AzureIoTADUClient_ADUProcessLoop( AzureIoTADUClient_t * pxAduCl
  *         the update request is applicable (e.g., if the version is not already
  *         installed).
  *         This function also provides the payload to acknowledge the ADU service
- *         Azure Plug-and-Play writable properties.   
- * 
+ *         Azure Plug-and-Play writable properties.
+ *
  * @param[in] pxAduClient The #AzureIoTADUClient_t * to use for this call.
  * @param[in] pxReader  A #AzureIoTJSONReader_t initialized with the ADU
  *                      service writable properties json, set to the

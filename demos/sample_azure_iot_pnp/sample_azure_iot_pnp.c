@@ -27,6 +27,8 @@
 /* Crypto helper header. */
 #include "crypto.h"
 
+#include "mbedtls/base64.h"
+
 /* Demo Specific configs. */
 #include "demo_config.h"
 
@@ -312,6 +314,136 @@ static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCred
 
     return 0;
 }
+
+
+/*-----------------------------------------------------------*/
+
+char ucManifestBuffer[ 2500 ];
+char * ucManifest = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0.eyJzaGEyNTYiOiJzaDRIcjZSNGxXNEtVRGdDNkJEQUo0dTNZMys1Z0srOXgxQVFSNnBTWEpRPSJ9.dSQKe7CPdj44VUSLlghLy-kSE5gsWEjPTLwdyGsgQTrxfk5fn-AJPe7VR5hVscfClPkI3EVpEbMN8rNDwDQupNnl0fp1phPr6kBj_j30UfRIvvd4lcoVYUABw-s8GhmuxShXrTPJWUSTGlTPlN1PdTvxIaRH2hoaMc6G2mZwoEQyjkAw_jqxXhYqYNXBl94AfcSTxqdGzHuEMfan7utaZgkS5HiGK_OFVlWXYFr3FpxoCcFmQDh-ANZJil25K4lngBuYTE5PgGguAD_ZvDBsyzw99ParYbgYXLk0wGagwPGhu2FANLmQuCsgYtXKt5lFs_hxJGEUTSslod6oXaw0utQlxRWgwMMIKTWAspzAm1XBsbpzB3FCF-97Qg5BzVexsRY3gtmKKp90eM0y5O_PXd7lAooPHf11BfQXJ2TCqcU9SdkPpQ4zZZILy5b2VP8vIgRL-VFwxzdyZpT3639t1oq1fnEtCBi91vLcXPMGq68iI7TrZH3slvTK3lSLlQO7";
+char ucBase64DecodedOne[ 1400 ];
+char ucBase64DecodedTwo[ 60 ];
+char ucBase64DecodedThree[ 400 ];
+
+AzureIoTResult_t AzureSplitJWS( char * pucJWS,
+                                uint32_t ulJWSLength,
+                                char ** ppucHeader,
+                                uint32_t * pulHeaderLength,
+                                char ** ppucPayload,
+                                uint32_t * pulPayloadLength,
+                                char ** ppucSignature,
+                                uint32_t * pulSignatureLength )
+{
+    char * pucFirstDot;
+    char * pucSecondDot;
+    uint32_t ulDotCount = 0;
+    uint32_t ulIndex = 0;
+
+    *ppucHeader = pucJWS;
+
+    while( ulIndex < ulJWSLength )
+    {
+        if( *pucJWS == '.' )
+        {
+            ulDotCount++;
+
+            if( ulDotCount == 1 )
+            {
+                pucFirstDot = pucJWS;
+            }
+            else if( ulDotCount == 2 )
+            {
+                pucSecondDot = pucJWS;
+            }
+            else if( ulDotCount > 2 )
+            {
+                return eAzureIoTErrorFailed;
+            }
+        }
+
+        pucJWS++;
+        ulIndex++;
+    }
+
+    if( ( ulDotCount != 2 ) || ( pucSecondDot >= ( *ppucHeader + ulJWSLength - 1 ) ) )
+    {
+        return eAzureIoTErrorFailed;
+    }
+
+    *pulHeaderLength = pucFirstDot - *ppucHeader;
+    *ppucPayload = pucFirstDot + 1;
+    *pulPayloadLength = pucSecondDot - *ppucPayload;
+    *ppucSignature = pucSecondDot + 1;
+    *pulSignatureLength = *ppucHeader + ulJWSLength - *ppucSignature;
+}
+
+AzureIoTResult_t AzureIoTSwapURLEncoding( char * pucSignature,
+                                          uint32_t ulSignatureLength )
+{
+    uint32_t ulIndex = 0;
+
+    char * hold = pucSignature;
+
+    while( ulIndex < ulSignatureLength )
+    {
+        if( *pucSignature == '-' )
+        {
+            *pucSignature = '+';
+        }
+        else if( *pucSignature == '_' )
+        {
+            *pucSignature = '/';
+        }
+
+        pucSignature++;
+        ulIndex++;
+    }
+
+    printf( "Swapped: %.*s\n", ulSignatureLength, hold );
+}
+
+void jws( void )
+{
+    char * pucHeader;
+    char * pucPayload;
+    char * pucSignature;
+    uint32_t ulHeaderLength;
+    uint32_t ulPayloadLength;
+    uint32_t ulSignatureLength;
+
+    memcpy( ucManifestBuffer, ucManifest, strlen( ucManifest ) );
+
+    AzureIoTResult_t xResult = AzureSplitJWS( ucManifestBuffer, strlen( ucManifestBuffer ),
+                                              &pucHeader, &ulHeaderLength,
+                                              &pucPayload, &ulPayloadLength,
+                                              &pucSignature, &ulSignatureLength );
+
+    printf( "JWS Part One\n" );
+    size_t mbedtlsOutSize;
+    int ret = mbedtls_base64_decode( ucBase64DecodedOne, sizeof( ucBase64DecodedOne ), &mbedtlsOutSize, pucHeader, ulHeaderLength );
+    printf( "mbedtls ret: %i\n", ret );
+    printf( "Out Decoded Size: %li\n", mbedtlsOutSize );
+    printf( "%.*s\n\n", ( int ) mbedtlsOutSize, ucBase64DecodedOne );
+
+    printf( "JWS Part Two\n" );
+    size_t outDecodedSizeTwo;
+    ret = mbedtls_base64_decode( ucBase64DecodedTwo, sizeof( ucBase64DecodedTwo ), &outDecodedSizeTwo, pucPayload, ulPayloadLength );
+    printf( "mbedtls Result: 0x%x\n", ret );
+    printf( "Out Decoded Size: %li\n", outDecodedSizeTwo );
+    printf( "%.*s\n\n", ( int ) outDecodedSizeTwo, ucBase64DecodedTwo );
+
+    printf( "JWS Part Three\n" );
+    xResult = AzureIoTSwapURLEncoding( pucSignature, ulSignatureLength );
+    size_t outDecodedSizeThree;
+    ret = mbedtls_base64_decode( ucBase64DecodedThree, sizeof( ucBase64DecodedThree ), &outDecodedSizeThree, pucSignature, ulSignatureLength );
+    printf( "Core Result: 0x%x\n", ret );
+    printf( "Out Decoded Size: %li\n", outDecodedSizeThree );
+    printf( "%.*s\n\n", ( int ) outDecodedSizeThree, ucBase64DecodedThree );
+
+    while( 1 )
+    {
+    }
+}
+
 /*-----------------------------------------------------------*/
 
 /**
@@ -344,6 +476,8 @@ static void prvAzureDemoTask( void * pvParameters )
     #endif /* democonfigENABLE_DPS_SAMPLE */
 
     ( void ) pvParameters;
+
+    jws();
 
     /* Initialize Azure IoT Middleware.  */
     configASSERT( AzureIoT_Init() == eAzureIoTSuccess );
