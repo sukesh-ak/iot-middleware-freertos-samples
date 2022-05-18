@@ -476,8 +476,6 @@ void jws( void )
 
     char * pucJWKManifest = az_span_ptr( xJWKManifestSpan );
     uint32_t ulJWKManifestLength = az_span_size( xJWKManifestSpan );
-    printf( "Parsed out manifest from JSON:\n" );
-    printf( "%.*s\n", ( int ) ulJWKManifestLength, pucJWKManifest );
 
     /*------------------- Base64 Decode the JWK Payload ------------------------*/
 
