@@ -329,6 +329,8 @@ char ucBase64DecodedJWKPayload[ 700 ];
 char ucBase64EncodedJWKPayloadCopyWithEquals[ 700 ];
 char ucBase64DecodedJWKSignature[ 500 ];
 
+char ucCalculatationBuffer[512];
+
 AzureIoTResult_t AzureSplitJWS( char * pucJWS,
                                 uint32_t ulJWSLength,
                                 char ** ppucHeader,
@@ -404,6 +406,42 @@ AzureIoTResult_t AzureIoTSwapURLEncoding( char * pucSignature,
     }
 }
 
+#define azureiotRSA3072_SIZE 384
+#define azureiotSHA256_SIZE 32
+
+AzureIoTResult_t AzureIoT_SHA256Calculate( char * metadata,
+                                       uint32_t metadataLength,
+                                       char * input,
+                                       uint32_t inputLength,
+                                       char * output,
+                                       uint32_t outputLength )
+{
+    return eAzureIoTSuccess;
+}
+
+AzureIoTResult_t AzureIoT_RS256Verify( char * input,
+                                       uint32_t inputLength,
+                                       char * signature,
+                                       uint32_t signatureLength,
+                                       char * n,
+                                       uint32_t nLength,
+                                       char * e,
+                                       uint32_t eLength,
+                                       char * buffer,
+                                       uint32_t bufferLength )
+{
+  AzureIoTResult_t xResult;
+
+  char *shaBuffer = buffer + azureiotRSA3072_SIZE;
+  char* metadata;
+  uint32_t metadataLength;
+  xResult = AzureIoT_SHA256Calculate(metadata, metadataLength,
+                                      input, inputLength,
+                                      shaBuffer, azureiotSHA256_SIZE);
+
+  return xResult;
+}
+
 void jws( void )
 {
     char * pucHeader;
@@ -412,6 +450,7 @@ void jws( void )
     uint32_t ulHeaderLength;
     uint32_t ulPayloadLength;
     uint32_t ulSignatureLength;
+    AzureIoTJSONReader_t xJSONReader;
 
     memcpy( ucManifestBuffer, ucManifest, strlen( ucManifest ) );
 
@@ -453,7 +492,9 @@ void jws( void )
 
     /*------------------- Parse JSK JSON Payload ------------------------*/
 
-    AzureIoTJSONReader_t xJSONReader;
+    /* The "sjwk" is the signed signing public key */
+    /* I believe as opposed to having a chain of trust for a public key, this is taking a known key */
+    /* (baked into the device) and signing the key which was used to sign the manifest. */
     AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedHeader, outDecodedSizeOne );
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
 
@@ -503,7 +544,7 @@ void jws( void )
 
     printf( "---JWK Part Two---\n" );
     /* Have to hack in the padded characters */
-    memcpy(ucBase64EncodedJWKPayloadCopyWithEquals, pucJWKPayload, ulJWKPayloadLength);
+    memcpy( ucBase64EncodedJWKPayloadCopyWithEquals, pucJWKPayload, ulJWKPayloadLength );
     ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength ] = '=';
     ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength + 1 ] = '=';
     ulJWKPayloadLength = ulJWKPayloadLength + 2;
@@ -524,6 +565,53 @@ void jws( void )
     printf( "Core Return: 0x%x\n", xCoreResult );
     printf( "Out Decoded Size: %i\n", outDecodedJWKSizeThree );
     printf( "%.*s\n\n", ( int ) outDecodedJWKSizeThree, ucBase64DecodedJWKSignature );
+
+    /*------------------- Parse necessary pieces for the verification ------------------------*/
+    az_span nSpan;
+    az_span eSpan;
+    az_span RS256Span;
+    AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedJWKPayload, outDecodedJWKSizeTwo );
+
+    while( xResult == eAzureIoTSuccess )
+    {
+        if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "n", strlen( "n" ) ) )
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            nSpan = xJSONReader._internal.xCoreReader.token.slice;
+
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            break;
+        }
+        else if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "e", strlen( "e" ) ) )
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            eSpan = xJSONReader._internal.xCoreReader.token.slice;
+
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            break;
+        }
+        else if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "RS256", strlen( "RS256" ) ) )
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            RS256Span = xJSONReader._internal.xCoreReader.token.slice;
+
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            break;
+        }
+        else
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            xResult = AzureIoTJSONReader_SkipChildren( &xJSONReader );
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+        }
+    }
+
+    /*------------------- Verify the manifest ------------------------*/
+    xResult = AzureIoT_RS256Verify(pucJWKHeader, ulJWKHeaderLength + ulJWKPayloadLength + 1,
+                          ucBase64DecodedJWKSignature, outDecodedJWKSizeThree,
+                          az_span_ptr(nSpan), az_span_size(nSpan),
+                          az_span_ptr(eSpan), az_span_size(eSpan),
+                          ucCalculatationBuffer, sizeof(ucCalculatationBuffer));
 
     /*------------------- Done (Loop) ------------------------*/
     while( 1 )
