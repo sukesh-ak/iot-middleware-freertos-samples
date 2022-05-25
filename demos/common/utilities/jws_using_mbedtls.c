@@ -313,6 +313,11 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     /* I believe as opposed to having a chain of trust for a public key, this is taking a known key */
     /* (baked into the device) and signing the key which was used to sign the manifest. */
     printf( "---Parsing JWS JSON Payload---\n" );
+
+    //TODO: REMOVE THIS HACK
+    ucBase64DecodedHeader[outDecodedSizeOne] = '"';
+    ucBase64DecodedHeader[outDecodedSizeOne + 1] = '}';
+    outDecodedSizeOne = outDecodedSizeOne + 2;
     AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedHeader, outDecodedSizeOne );
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
 
@@ -321,6 +326,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
         if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sjwk", strlen( "sjwk" ) ) )
         {
             xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            printf("Coreresult: %i\n", xResult);
             break;
         }
         else
@@ -335,6 +341,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     char * pucJWKManifest = az_span_ptr( xJWKManifestSpan );
     uint32_t ulJWKManifestLength = az_span_size( xJWKManifestSpan );
+    printf("JWKManifest Length: %i\n", ulJWKManifestLength);
 
     /*------------------- Base64 Decode the JWK Payload ------------------------*/
 
@@ -499,7 +506,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     }
 
     /*------------------- Verify that the signature was signed by signing key ------------------------*/
-    ulVerificationResult = AzureIoT_RS256Verify( pucHeader, ulHeaderLength + ulPayloadLength - 1,
+    ulVerificationResult = AzureIoT_RS256Verify( pucHeader, ulHeaderLength + ulPayloadLength + 1,
                                                  ucBase64DecodedSignature, outDecodedSizeThree,
                                                  ucBase64DecodedSigningKeyN, outDecodedSigningKeyN,
                                                  ucBase64DecodedSigningKeyE, outDecodedSigningKeyE,
