@@ -15,33 +15,24 @@
 #include "mbedtls/entropy.h"
 #include "mbedtls/cipher.h"
 
-
-
 #define azureiotRSA3072_SIZE    384
 #define azureiotSHA256_SIZE     32
 #define azureiotMODULUS_SIZE    384
 
-char ucManifestBuffer[ 2500 ];
-char * ucEscapedManifest = "{\"manifestVersion\":\"4\",\"updateId\":{\"provider\":\"ESPRESSIF\",\"name\":\"ESP32-Azure-IoT-Kit\",\"version\":\"1.1\"},\"compatibility\":[{\"deviceManufacturer\":\"ESPRESSIF\",\"deviceModel\":\"ESP32-Azure-IoT-Kit\"}],\"instructions\":{\"steps\":[{\"handler\":\"microsoft/swupdate:1\",\"files\":[\"f9fec76f10aede60e\"],\"handlerProperties\":{\"installedCriteria\":\"1.0\"}}]},\"files\":{\"f9fec76f10aede60e\":{\"fileName\":\"azure_iot_freertos_esp32-v1.1.bin\",\"sizeInBytes\":861520,\"hashes\":{\"sha256\":\"BwsqbyduNatbrmHaLauoxeC1EY4J8Dv7mE76RxUfUAk=\"}}},\"createdDateTime\":\"2022-04-19T15:52:45.8497679Z\"}";
-char * ucManifestSignature = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0=.eyJzaGEyNTYiOiJJVHB3ZWxTTjJRWHBBaDFDNVoxWjVDNmV3VzNHK2kvM1VKcm1kZ1lSaG1VPSJ9.jmh3bEm-pfjzlxJfylexPX0fUqMeCiyP5uvFTd0QdAIk9cMIxv-8_SfzCTrhT-SvTf8XFTLkoFbhgsa0y5nTLxSm8Y2fR3WvkGIZGGywV89zQ-fEGnmM4lsiunlXI6hrVv3uQQeKhjcRWAgwpcwXE4xlP2cejPV9Auxy8rcRnNrf5-3Y21M1QBmCgkDj4Kv9xABo9U5w90I5XEu4hzbWbLAr-KLCiokck4rze6zLKjistAge8VtC318yBiEN2np_GQAXvt_IHkSkS6VTxryCX7hA5TdNQiugQvoXzTPVeRa0WmfAjk1FQZq_JuWJbEazPrhzQtKDhikO9aD-O9Ju6SCTsDVdmUIv0Hn_aq2a3l1rvcajhfpsPGdy3Lw605AGs1Fctu7W3jK5IFcoOstNvW905ywOV_NP5xlcm3vn17kGjgXAgeSaWo1NDT11ghPwZy82M5mKEof9gRy_edu99TSB00MRo3TX-vE80FIrjIrBAFToTDjRadE04JFfaiOX";
-char * ucManifestShort = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0.eyJzaGEyNTYiOiJJVHB3ZWxTTjJRWHBBaDFDNVoxWjVDNmV3VzNHK2kvM1VKcm1kZ1lSaG1VPSJ9";
 char ucBase64DecodedHeader[ 1400 ];
 char ucBase64DecodedPayload[ 60 ];
 char ucBase64DecodedSignature[ 400 ];
 
 char ucBase64DecodedJWKHeader[ 48 ];
 char ucBase64DecodedJWKPayload[ 700 ];
-char ucBase64EncodedJWKPayloadCopyWithEquals[ 700 ];
 char ucBase64DecodedJWKSignature[ 500 ];
 
 char ucBase64DecodedSigningKeyN[ 512 ];
 char ucBase64DecodedSigningKeyE[ 16 ];
 
-char ucBase64EncodedCalculatedSignature[ 48 ];
+char ucEscapedManifestSHACalculation[ azureiotSHA256_SIZE ];
 
-char ucCalculatationBuffer[ 4096 ];
-
-char * ucRandomSeed = "adu";
+char ucCalculatationBuffer[ azureiotRSA3072_SIZE + azureiotMODULUS_SIZE ];
 
 static uint32_t prvSplitJWS( char * pucJWS,
                              uint32_t ulJWSLength,
@@ -158,9 +149,9 @@ uint32_t AzureIoT_RS256Verify( char * input,
     char * decryptedPtr = buffer;
     size_t decryptedLength;
 
-    printf("RS256 Verify Input:\n");
-    printf("%.*s", inputLength, input);
-    printf("\n");
+    printf( "RS256 Verify Input:\n" );
+    printf( "%.*s", inputLength, input );
+    printf( "\n" );
 
     /* The signature is encrypted using the input key. We need to decrypt the */
     /* signature which gives us the SHA256. We then compare that to taking the SHA256 */
@@ -275,8 +266,6 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     printf( "---------------------Begin Signature Validation --------------------\n\n" );
 
-    memcpy( ucManifestBuffer, ucManifestSignature, strlen( ucManifestSignature ) );
-
     /*------------------- Parse and Decode the Manifest Sig ------------------------*/
 
     AzureIoTResult_t xResult = prvSplitJWS( pucJWS, ulJWSLength,
@@ -286,25 +275,25 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     prvSwapToUrlEncodingChars( pucSignature, ulSignatureLength );
 
     printf( "---JWS Base64 Decode Header---\n" );
-    int32_t outDecodedSizeOne;
-    mbedtResult = mbedtls_base64_decode(ucBase64DecodedHeader, sizeof( ucBase64DecodedHeader ),(size_t*) &outDecodedSizeOne, pucHeader, ulHeaderLength);
+    int32_t outJWSDecodedHeaderLength;
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedHeader, sizeof( ucBase64DecodedHeader ), ( size_t * ) &outJWSDecodedHeaderLength, pucHeader, ulHeaderLength );
     printf( "\tmbedTLS Return: 0x%x\n", mbedtResult );
-    printf( "\tOut Decoded Size: %i\n", outDecodedSizeOne );
-    printf( "\t%.*s\n\n", ( int ) outDecodedSizeOne, ucBase64DecodedHeader );
+    printf( "\tOut Decoded Size: %i\n", outJWSDecodedHeaderLength );
+    printf( "\t%.*s\n\n", ( int ) outJWSDecodedHeaderLength, ucBase64DecodedHeader );
 
     printf( "---JWS Base64 Decode Payload---\n" );
-    int32_t outDecodedSizeTwo;
-    mbedtResult = mbedtls_base64_decode(ucBase64DecodedPayload, sizeof( ucBase64DecodedPayload ),(size_t*) &outDecodedSizeTwo, pucPayload, ulPayloadLength);
+    int32_t outJWSDecodedLength;
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedPayload, sizeof( ucBase64DecodedPayload ), ( size_t * ) &outJWSDecodedLength, pucPayload, ulPayloadLength );
     printf( "\tmbedTLS Return: 0x%x\n", mbedtResult );
-    printf( "\tOut Decoded Size: %i\n", outDecodedSizeTwo );
-    printf( "\t%.*s\n\n", ( int ) outDecodedSizeTwo, ucBase64DecodedPayload );
+    printf( "\tOut Decoded Size: %i\n", outJWSDecodedLength );
+    printf( "\t%.*s\n\n", ( int ) outJWSDecodedLength, ucBase64DecodedPayload );
 
     printf( "---JWS Base64 Decode Signature---\n" );
-    int32_t outDecodedSizeThree;
-    mbedtResult = mbedtls_base64_decode(ucBase64DecodedSignature, sizeof( ucBase64DecodedSignature ), (size_t*)&outDecodedSizeThree, pucSignature, ulSignatureLength);
+    int32_t outJWSDecodedSignatureLength;
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedSignature, sizeof( ucBase64DecodedSignature ), ( size_t * ) &outJWSDecodedSignatureLength, pucSignature, ulSignatureLength );
     printf( "\tmbedTLS Return: 0x%x\n", mbedtResult );
-    printf( "\tOut Decoded Size: %i\n", outDecodedSizeThree );
-    printf( "\t%.*s\n\n", ( int ) outDecodedSizeThree, ucBase64DecodedSignature );
+    printf( "\tOut Decoded Size: %i\n", outJWSDecodedSignatureLength );
+    printf( "\t%.*s\n\n", ( int ) outJWSDecodedSignatureLength, ucBase64DecodedSignature );
 
 
     /*------------------- Parse JSK JSON Payload ------------------------*/
@@ -314,11 +303,11 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     /* (baked into the device) and signing the key which was used to sign the manifest. */
     printf( "---Parsing JWS JSON Payload---\n" );
 
-    //TODO: REMOVE THIS HACK
-    ucBase64DecodedHeader[outDecodedSizeOne] = '"';
-    ucBase64DecodedHeader[outDecodedSizeOne + 1] = '}';
-    outDecodedSizeOne = outDecodedSizeOne + 2;
-    AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedHeader, outDecodedSizeOne );
+    /*TODO: REMOVE THIS HACK */
+    ucBase64DecodedHeader[ outJWSDecodedHeaderLength ] = '"';
+    ucBase64DecodedHeader[ outJWSDecodedHeaderLength + 1 ] = '}';
+    outJWSDecodedHeaderLength = outJWSDecodedHeaderLength + 2;
+    AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedHeader, outJWSDecodedHeaderLength );
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
 
     while( xResult == eAzureIoTSuccess )
@@ -326,7 +315,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
         if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sjwk", strlen( "sjwk" ) ) )
         {
             xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
-            printf("Coreresult: %i\n", xResult);
+            printf( "Coreresult: %i\n", xResult );
             break;
         }
         else
@@ -341,7 +330,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     char * pucJWKManifest = az_span_ptr( xJWKManifestSpan );
     uint32_t ulJWKManifestLength = az_span_size( xJWKManifestSpan );
-    printf("JWKManifest Length: %i\n", ulJWKManifestLength);
+    printf( "JWKManifest Length: %i\n", ulJWKManifestLength );
 
     /*------------------- Base64 Decode the JWK Payload ------------------------*/
 
@@ -362,31 +351,25 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     printf( "--- JWK Base64 Decode Header ---\n" );
     int32_t outDecodedJWKSizeOne;
-    mbedtls_base64_decode( ucBase64DecodedJWKHeader, sizeof( ucBase64DecodedJWKHeader ), (size_t*)&outDecodedJWKSizeOne, pucJWKHeader, ulJWKHeaderLength );
+    mbedtls_base64_decode( ucBase64DecodedJWKHeader, sizeof( ucBase64DecodedJWKHeader ), ( size_t * ) &outDecodedJWKSizeOne, pucJWKHeader, ulJWKHeaderLength );
     printf( "\tCore Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedJWKSizeOne );
     printf( "\t%.*s\n\n", ( int ) outDecodedJWKSizeOne, ucBase64DecodedJWKHeader );
 
     printf( "--- JWK Base64 Decode Payload ---\n" );
-    /* Have to hack in the padded characters */
-    memcpy( ucBase64EncodedJWKPayloadCopyWithEquals, pucJWKPayload, ulJWKPayloadLength );
-    ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength ] = '=';
-    ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength + 1 ] = '=';
-    int32_t newJWKPayloadLength = ulJWKPayloadLength + 2;
-
     int32_t outDecodedJWKSizeTwo;
     mbedtResult = mbedtls_base64_decode( ucBase64DecodedJWKPayload,
-                                             sizeof( ucBase64DecodedJWKPayload ),
-                                             (size_t*)&outDecodedJWKSizeTwo,
-                                             ucBase64EncodedJWKPayloadCopyWithEquals,
-                                             newJWKPayloadLength );
+                                         sizeof( ucBase64DecodedJWKPayload ),
+                                         ( size_t * ) &outDecodedJWKSizeTwo,
+                                         pucJWKPayload,
+                                         ulJWKPayloadLength );
     printf( "\tCore Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedJWKSizeTwo );
     printf( "\t%.*s\n\n", ( int ) outDecodedJWKSizeTwo, ucBase64DecodedJWKPayload );
 
     printf( "--- JWK Base64 Decode Signature ---\n" );
     int32_t outDecodedJWKSizeThree;
-    mbedtResult = mbedtls_base64_decode( ucBase64DecodedJWKSignature, sizeof( ucBase64DecodedJWKSignature ), (size_t*)&outDecodedJWKSizeThree, pucJWKSignature, ulJWKSignatureLength );
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedJWKSignature, sizeof( ucBase64DecodedJWKSignature ), ( size_t * ) &outDecodedJWKSizeThree, pucJWKSignature, ulJWKSignatureLength );
     printf( "\tCore Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedJWKSizeThree );
     printf( "\t%.*s\n\n", ( int ) outDecodedJWKSizeThree, ucBase64DecodedJWKSignature );
@@ -479,14 +462,14 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     /*------------------- Base64 decode the key ------------------------*/
     printf( "--- Signing key base64 decoding N ---\n" );
     int32_t outDecodedSigningKeyN;
-    mbedtResult = mbedtls_base64_decode( ucBase64DecodedSigningKeyN, sizeof( ucBase64DecodedSigningKeyN ) , (size_t*)&outDecodedSigningKeyN, az_span_ptr(nSpan), az_span_size(nSpan));
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedSigningKeyN, sizeof( ucBase64DecodedSigningKeyN ), ( size_t * ) &outDecodedSigningKeyN, az_span_ptr( nSpan ), az_span_size( nSpan ) );
     printf( "\tmbedtResult Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedSigningKeyN );
     printf( "\t%.*s\n\n", ( int ) outDecodedSigningKeyN, ucBase64DecodedSigningKeyN );
 
     printf( "--- Signing key base64 decoding E ---\n" );
     int32_t outDecodedSigningKeyE;
-    mbedtResult = mbedtls_base64_decode(ucBase64DecodedSigningKeyE, sizeof( ucBase64DecodedSigningKeyE ) , (size_t*)&outDecodedSigningKeyE, az_span_ptr(eSpan), az_span_size(eSpan));
+    mbedtResult = mbedtls_base64_decode( ucBase64DecodedSigningKeyE, sizeof( ucBase64DecodedSigningKeyE ), ( size_t * ) &outDecodedSigningKeyE, az_span_ptr( eSpan ), az_span_size( eSpan ) );
     printf( "\tmbedtResult Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedSigningKeyE );
     printf( "\t%.*s\n\n", ( int ) outDecodedSigningKeyE, ucBase64DecodedSigningKeyE );
@@ -507,10 +490,11 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     /*------------------- Verify that the signature was signed by signing key ------------------------*/
     ulVerificationResult = AzureIoT_RS256Verify( pucHeader, ulHeaderLength + ulPayloadLength + 1,
-                                                 ucBase64DecodedSignature, outDecodedSizeThree,
+                                                 ucBase64DecodedSignature, outJWSDecodedSignatureLength,
                                                  ucBase64DecodedSigningKeyN, outDecodedSigningKeyN,
                                                  ucBase64DecodedSigningKeyE, outDecodedSigningKeyE,
                                                  ucCalculatationBuffer, sizeof( ucCalculatationBuffer ) );
+
     if( ulVerificationResult != 0 )
     {
         printf( "Verification of signed manifest SHA failed\n" );
@@ -519,6 +503,45 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
     /*------------------- Verify that the SHAs match ------------------------*/
     /* decodedSpanHeader */
+    ulVerificationResult = AzureIoT_SHA256Calculate( pucEscapedManifest,
+                                                     ulEscapedManifestLength,
+                                                     ucEscapedManifestSHACalculation );
+
+    xResult = AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedPayload, outJWSDecodedLength );
+    printf("%.*s\n", outJWSDecodedLength, ucBase64DecodedPayload);
+    xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+
+    az_span sha256Span;
+    while( xResult == eAzureIoTSuccess )
+    {
+        if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sha256", strlen( "sha256" ) ) )
+        {
+            printf("found it\n");
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            sha256Span = xJSONReader._internal.xCoreReader.token.slice;
+            break;
+        }
+        else
+        {
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+            xResult = AzureIoTJSONReader_SkipChildren( &xJSONReader );
+            xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+        }
+    }
+
+    printf("Parsed SHA: %.*s\n", az_span_size(sha256Span), az_span_ptr(sha256Span));
+
+    char parsedSha[azureiotSHA256_SIZE];
+    int32_t outParseSha;
+    mbedtResult = mbedtls_base64_decode( parsedSha, sizeof( parsedSha ), ( size_t * ) &outParseSha, az_span_ptr( sha256Span ), az_span_size( sha256Span ) );
+
+    ulVerificationResult = memcmp(ucEscapedManifestSHACalculation, parsedSha, azureiotSHA256_SIZE);
+
+    if( ulVerificationResult != 0 )
+    {
+        printf( "Calculated manifest SHA does not match SHA in payload\n" );
+        return ulVerificationResult;
+    }
 
     /*------------------- Done (Loop) ------------------------*/
     return ulVerificationResult;
