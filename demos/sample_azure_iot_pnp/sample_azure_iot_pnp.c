@@ -29,6 +29,9 @@
 /* Crypto helper header. */
 #include "crypto.h"
 
+/* JWS Verification Code */
+#include "jws.h"
+
 /* Demo Specific configs. */
 #include "demo_config.h"
 

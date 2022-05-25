@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint32_t AzureIoT_SHA256Calculate( char * input,
+uint32_t AzureIoT_SHA256Calculate( const char * input,
                                    uint32_t inputLength,
                                    char * output );
 

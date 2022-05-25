@@ -111,7 +111,7 @@ static void prvSwapToUrlEncodingChars( char * pucSignature,
     }
 }
 
-uint32_t AzureIoT_SHA256Calculate( char * input,
+uint32_t AzureIoT_SHA256Calculate( const char * input,
                                    uint32_t inputLength,
                                    char * output )
 {
@@ -508,7 +508,9 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
                                                      ucEscapedManifestSHACalculation );
 
     xResult = AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedPayload, outJWSDecodedLength );
-    printf("%.*s\n", outJWSDecodedLength, ucBase64DecodedPayload);
+    //Begin object
+    xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
+    //Property Name
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
 
     az_span sha256Span;
@@ -516,7 +518,6 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     {
         if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sha256", strlen( "sha256" ) ) )
         {
-            printf("found it\n");
             xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
             sha256Span = xJSONReader._internal.xCoreReader.token.slice;
             break;
@@ -541,6 +542,10 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     {
         printf( "Calculated manifest SHA does not match SHA in payload\n" );
         return ulVerificationResult;
+    }
+    else
+    {
+        printf("Calculated manifest SHA matches parsed SHA");
     }
 
     /*------------------- Done (Loop) ------------------------*/
