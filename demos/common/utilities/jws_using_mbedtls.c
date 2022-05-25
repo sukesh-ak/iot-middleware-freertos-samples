@@ -372,14 +372,14 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     memcpy( ucBase64EncodedJWKPayloadCopyWithEquals, pucJWKPayload, ulJWKPayloadLength );
     ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength ] = '=';
     ucBase64EncodedJWKPayloadCopyWithEquals[ ulJWKPayloadLength + 1 ] = '=';
-    ulJWKPayloadLength = ulJWKPayloadLength + 2;
+    int32_t newJWKPayloadLength = ulJWKPayloadLength + 2;
 
     int32_t outDecodedJWKSizeTwo;
     mbedtResult = mbedtls_base64_decode( ucBase64DecodedJWKPayload,
                                              sizeof( ucBase64DecodedJWKPayload ),
                                              (size_t*)&outDecodedJWKSizeTwo,
                                              ucBase64EncodedJWKPayloadCopyWithEquals,
-                                             ulJWKPayloadLength );
+                                             newJWKPayloadLength );
     printf( "\tCore Return: 0x%x\n", mbedtResult );
     printf( "\tOut Decoded Size: %i\n", outDecodedJWKSizeTwo );
     printf( "\t%.*s\n\n", ( int ) outDecodedJWKSizeTwo, ucBase64DecodedJWKPayload );
@@ -493,7 +493,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
 
 
     /*------------------- Verify the signature ------------------------*/
-    ulVerificationResult = AzureIoT_RS256Verify( pucJWKHeader, ulJWKHeaderLength + ulJWKPayloadLength - 1,
+    ulVerificationResult = AzureIoT_RS256Verify( pucJWKHeader, ulJWKHeaderLength + ulJWKPayloadLength + 1,
                                                  ucBase64DecodedJWKSignature, outDecodedJWKSizeThree,
                                                  ( unsigned char * ) AzureIoTADURootKeyN, sizeof( AzureIoTADURootKeyN ),
                                                  ( unsigned char * ) AzureIoTADURootKeyE, sizeof( AzureIoTADURootKeyE ),
