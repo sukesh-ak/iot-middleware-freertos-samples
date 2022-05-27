@@ -17,7 +17,6 @@
 
 #define azureiotRSA3072_SIZE    384
 #define azureiotSHA256_SIZE     32
-#define azureiotMODULUS_SIZE    384
 
 char ucBase64DecodedHeader[ 1400 ];
 char ucBase64DecodedPayload[ 60 ];
@@ -27,12 +26,12 @@ char ucBase64DecodedJWKHeader[ 48 ];
 char ucBase64DecodedJWKPayload[ 700 ];
 char ucBase64DecodedJWKSignature[ 500 ];
 
-char ucBase64DecodedSigningKeyN[ 512 ];
+char ucBase64DecodedSigningKeyN[ azureiotRSA3072_SIZE ];
 char ucBase64DecodedSigningKeyE[ 16 ];
 
 char ucEscapedManifestSHACalculation[ azureiotSHA256_SIZE ];
 
-char ucCalculatationBuffer[ azureiotRSA3072_SIZE + azureiotMODULUS_SIZE ];
+char ucCalculatationBuffer[ azureiotRSA3072_SIZE + azureiotSHA256_SIZE ];
 
 static uint32_t prvSplitJWS( char * pucJWS,
                              uint32_t ulJWSLength,
@@ -142,7 +141,13 @@ uint32_t AzureIoT_RS256Verify( char * input,
     AzureIoTResult_t xResult;
     int mbedTLSResult;
 
-    char * shaBuffer = buffer + azureiotMODULUS_SIZE;
+    if (bufferLength < azureiotRSA3072_SIZE + azureiotSHA256_SIZE )
+    {
+      printf("Buffer Not Large Enough\n");
+      return 1;
+    }
+
+    char * shaBuffer = buffer + azureiotRSA3072_SIZE;
     char * metadata;
     uint32_t metadataLength;
 
@@ -192,7 +197,7 @@ uint32_t AzureIoT_RS256Verify( char * input,
     printf( "---- Decrypting ----\n" );
 
     /* RSA */
-    mbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, &decryptedLength, signature, buffer, azureiotMODULUS_SIZE );
+    mbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, &decryptedLength, signature, buffer, azureiotRSA3072_SIZE );
 
     if( mbedTLSResult != 0 )
     {
@@ -545,7 +550,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     }
     else
     {
-        printf("Calculated manifest SHA matches parsed SHA");
+        printf("Calculated manifest SHA matches parsed SHA\n");
     }
 
     /*------------------- Done (Loop) ------------------------*/
