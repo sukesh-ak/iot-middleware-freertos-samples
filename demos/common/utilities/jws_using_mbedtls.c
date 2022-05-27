@@ -30,6 +30,7 @@ char ucBase64DecodedSigningKeyN[ azureiotRSA3072_SIZE ];
 char ucBase64DecodedSigningKeyE[ 16 ];
 
 char ucEscapedManifestSHACalculation[ azureiotSHA256_SIZE ];
+char parsedSha[ azureiotSHA256_SIZE ];
 
 char ucCalculatationBuffer[ azureiotRSA3072_SIZE + azureiotSHA256_SIZE ];
 
@@ -141,10 +142,10 @@ uint32_t AzureIoT_RS256Verify( char * input,
     AzureIoTResult_t xResult;
     int mbedTLSResult;
 
-    if (bufferLength < azureiotRSA3072_SIZE + azureiotSHA256_SIZE )
+    if( bufferLength < azureiotRSA3072_SIZE + azureiotSHA256_SIZE )
     {
-      printf("Buffer Not Large Enough\n");
-      return 1;
+        printf( "Buffer Not Large Enough\n" );
+        return 1;
     }
 
     char * shaBuffer = buffer + azureiotRSA3072_SIZE;
@@ -159,8 +160,8 @@ uint32_t AzureIoT_RS256Verify( char * input,
     printf( "\n" );
 
     /* The signature is encrypted using the input key. We need to decrypt the */
-    /* signature which gives us the SHA256. We then compare that to taking the SHA256 */
-    /* of the input. */
+    /* signature which gives us the SHA256 inside a PKCS7 structure. We then compare
+    /* that to the SHA256 of the input. */
     mbedtls_rsa_context ctx;
 
     mbedtls_rsa_init( &ctx, MBEDTLS_RSA_PKCS_V15, 0 );
@@ -304,8 +305,6 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     /*------------------- Parse JSK JSON Payload ------------------------*/
 
     /* The "sjwk" is the signed signing public key */
-    /* I believe as opposed to having a chain of trust for a public key, this is taking a known key */
-    /* (baked into the device) and signing the key which was used to sign the manifest. */
     printf( "---Parsing JWS JSON Payload---\n" );
 
     /*TODO: REMOVE THIS HACK */
@@ -513,12 +512,13 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
                                                      ucEscapedManifestSHACalculation );
 
     xResult = AzureIoTJSONReader_Init( &xJSONReader, ucBase64DecodedPayload, outJWSDecodedLength );
-    //Begin object
+    /*Begin object */
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
-    //Property Name
+    /*Property Name */
     xResult = AzureIoTJSONReader_NextToken( &xJSONReader );
 
     az_span sha256Span;
+
     while( xResult == eAzureIoTSuccess )
     {
         if( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "sha256", strlen( "sha256" ) ) )
@@ -535,13 +535,12 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
         }
     }
 
-    printf("Parsed SHA: %.*s\n", az_span_size(sha256Span), az_span_ptr(sha256Span));
+    printf( "Parsed SHA: %.*s\n", az_span_size( sha256Span ), az_span_ptr( sha256Span ) );
 
-    char parsedSha[azureiotSHA256_SIZE];
     int32_t outParseSha;
     mbedtResult = mbedtls_base64_decode( parsedSha, sizeof( parsedSha ), ( size_t * ) &outParseSha, az_span_ptr( sha256Span ), az_span_size( sha256Span ) );
 
-    ulVerificationResult = memcmp(ucEscapedManifestSHACalculation, parsedSha, azureiotSHA256_SIZE);
+    ulVerificationResult = memcmp( ucEscapedManifestSHACalculation, parsedSha, azureiotSHA256_SIZE );
 
     if( ulVerificationResult != 0 )
     {
@@ -550,7 +549,7 @@ uint32_t JWS_Verify( const char * pucEscapedManifest,
     }
     else
     {
-        printf("Calculated manifest SHA matches parsed SHA\n");
+        printf( "Calculated manifest SHA matches parsed SHA\n" );
     }
 
     /*------------------- Done (Loop) ------------------------*/
