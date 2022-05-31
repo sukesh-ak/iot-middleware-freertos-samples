@@ -45,6 +45,7 @@
 struct NetworkContext
 {
     esp_transport_handle_t xTransport;
+    esp_transport_list_handle_t xTransportList;
     uint32_t ulReceiveTimeoutMs;
     uint32_t ulSendTimeoutMs;
 };
@@ -73,7 +74,11 @@ TlsTransportStatus_t TLS_Socket_Connect( NetworkContext_t * pNetworkContext,
         return eTLSTransportInvalidParameter;
     }
 
+    // Create a transport list into which we put the transport.
+    pNetworkContext->xTransportList = esp_transport_list_init();
     pNetworkContext->xTransport = esp_transport_ssl_init( );
+    esp_transport_list_add(pNetworkContext->xTransportList, pNetworkContext->xTransport, "_ssl");
+
     pNetworkContext->ulReceiveTimeoutMs = ulReceiveTimeoutMs;
     pNetworkContext->ulSendTimeoutMs = ulSendTimeoutMs;
     if ( pNetworkCredentials->ppcAlpnProtos )
@@ -118,6 +123,7 @@ TlsTransportStatus_t TLS_Socket_Connect( NetworkContext_t * pNetworkContext,
         {
             esp_transport_close( pNetworkContext->xTransport );
             esp_transport_destroy( pNetworkContext->xTransport );
+            esp_transport_list_destroy(pNetworkContext->xTransportList);
         }
     }
     else
@@ -142,8 +148,8 @@ void TLS_Socket_Disconnect( NetworkContext_t * pNetworkContext )
     /* Attempting to terminate TLS connection. */
     esp_transport_close( pNetworkContext->xTransport );
 
-    /* Free TLS contexts. */
-    esp_transport_destroy( pNetworkContext->xTransport );
+    /* Destroy list of transports */
+    esp_transport_list_destroy(pNetworkContext->xTransportList);
 }
 /*-----------------------------------------------------------*/
 
