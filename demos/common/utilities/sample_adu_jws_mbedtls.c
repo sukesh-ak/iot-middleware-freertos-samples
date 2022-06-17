@@ -603,7 +603,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
     }
 
     /*------------------- Parse id for root key ------------------------*/
-    AzureIoTJSONReader_Init( &xJSONReader, ( const uint8_t * ) ucJWKHeader, outJWKHeaderLength );
+    AzureIoTJSONReader_Init( &xJSONReader, ucJWKHeader, outJWKHeaderLength );
 
     if( prvFindRootKeyValue( &xJSONReader, &kidSpan ) != 0 )
     {
@@ -618,7 +618,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
     }
 
     /*------------------- Parse necessary pieces for the verification ------------------------*/
-    AzureIoTJSONReader_Init( &xJSONReader, ( const uint8_t * ) ucJWKPayload, outJWKPayloadLength );
+    AzureIoTJSONReader_Init( &xJSONReader, ucJWKPayload, outJWKPayloadLength );
 
     if( prvFindKeyParts( &xJSONReader, &xBase64EncodedNSpan, &xBase64EncodedESpan, &xAlgSpan ) != 0 )
     {
@@ -674,7 +674,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
     }
 
     /*------------------- Verify that the SHAs match ------------------------*/
-    ulVerificationResult = prvJWS_SHA256Calculate( ( const unsigned char * ) pucManifest,
+    ulVerificationResult = prvJWS_SHA256Calculate( pucManifest,
                                                    ulManifestLength,
                                                    ucManifestSHACalculation );
 
@@ -684,7 +684,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
         return ulVerificationResult;
     }
 
-    AzureIoTJSONReader_Init( &xJSONReader, ( const uint8_t * ) ucJWSPayload, outJWSPayloadLength );
+    AzureIoTJSONReader_Init( &xJSONReader, ucJWSPayload, outJWSPayloadLength );
 
     if( prvFindSHA( &xJSONReader, &sha256Span ) != 0 )
     {
