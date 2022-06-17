@@ -611,7 +611,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
         return eAzureIoTErrorFailed;
     }
 
-    if( !az_span_is_content_equal( az_span_create( (uint8_t *)AzureIoTADURootKeyId, sizeof( AzureIoTADURootKeyId ) - 1 ), kidSpan ) )
+    if( !az_span_is_content_equal( az_span_create( ( uint8_t * ) AzureIoTADURootKeyId, sizeof( AzureIoTADURootKeyId ) - 1 ), kidSpan ) )
     {
         LogError( ( "[JWS] Using the wrong root key" ) );
         return eAzureIoTErrorFailed;
@@ -650,8 +650,8 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
     /*------------------- Verify the signature ------------------------*/
     ulVerificationResult = prvJWS_RS256Verify( pucJWKBase64EncodedHeader, ulJWKBase64EncodedHeaderLength + ulJWKBase64EncodedPayloadLength + 1,
                                                ucJWKSignature, outJWKSignatureLength,
-                                              (uint8_t*) AzureIoTADURootKeyN, sizeof( AzureIoTADURootKeyN ),
-                                               (uint8_t*)AzureIoTADURootKeyE, sizeof( AzureIoTADURootKeyE ),
+                                               ( uint8_t * ) AzureIoTADURootKeyN, sizeof( AzureIoTADURootKeyN ),
+                                               ( uint8_t * ) AzureIoTADURootKeyE, sizeof( AzureIoTADURootKeyE ),
                                                ucScratchCalculatationBuffer, jwsSHA_CALCULATION_SCRATCH_SIZE );
 
     if( ulVerificationResult != 0 )
