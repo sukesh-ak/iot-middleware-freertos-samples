@@ -342,23 +342,26 @@ static int32_t prvFindKeyParts( AzureIoTJSONReader_t * pxPayload,
     /*Property Name */
     azureiotresultRETURN_IF_FAILED( AzureIoTJSONReader_NextToken( pxPayload ) );
 
-    while( xResult == eAzureIoTSuccess && ( az_span_size( *pxBase64EncodedNSpan ) == 0 || az_span_size( *pxBase64EncodedESpan ) == 0 || az_span_size( *pxAlgSpan ) == 0 ) )
+    while( xResult == eAzureIoTSuccess && 
+    ( az_span_size( *pxBase64EncodedNSpan ) == 0 ||
+     az_span_size( *pxBase64EncodedESpan ) == 0 || 
+     az_span_size( *pxAlgSpan ) == 0 ) )
     {
-        if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, ( const uint8_t * ) jws_n_json_value, sizeof( jws_n_json_value ) - 1 ) )
+        if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, jws_n_json_value, sizeof( jws_n_json_value ) - 1 ) )
         {
             azureiotresultRETURN_IF_FAILED( AzureIoTJSONReader_NextToken( pxPayload ) );
             *pxBase64EncodedNSpan = pxPayload->_internal.xCoreReader.token.slice;
 
             xResult = AzureIoTJSONReader_NextToken( pxPayload );
         }
-        else if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, ( const uint8_t * ) jws_e_json_value, sizeof( jws_e_json_value ) - 1 ) )
+        else if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, jws_e_json_value, sizeof( jws_e_json_value ) - 1 ) )
         {
             azureiotresultRETURN_IF_FAILED( AzureIoTJSONReader_NextToken( pxPayload ) );
             *pxBase64EncodedESpan = pxPayload->_internal.xCoreReader.token.slice;
 
             xResult = AzureIoTJSONReader_NextToken( pxPayload );
         }
-        else if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, ( const uint8_t * ) jws_alg_json_value, sizeof( jws_alg_json_value ) - 1 ) )
+        else if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, jws_alg_json_value, sizeof( jws_alg_json_value ) - 1 ) )
         {
             azureiotresultRETURN_IF_FAILED( AzureIoTJSONReader_NextToken( pxPayload ) );
             *pxAlgSpan = pxPayload->_internal.xCoreReader.token.slice;
@@ -395,7 +398,7 @@ static int32_t prvFindSHA( AzureIoTJSONReader_t * pxPayload,
 
     while( xResult == eAzureIoTSuccess )
     {
-        if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, ( const uint8_t * ) jws_sha256_json_value, sizeof( jws_sha256_json_value ) - 1 ) )
+        if( AzureIoTJSONReader_TokenIsTextEqual( pxPayload, jws_sha256_json_value, sizeof( jws_sha256_json_value ) - 1 ) )
         {
             azureiotresultRETURN_IF_FAILED( AzureIoTJSONReader_NextToken( pxPayload ) );
             break;
@@ -550,7 +553,7 @@ uint32_t JWS_ManifestAuthenticate( const uint8_t * pucManifest,
     /*------------------- Parse JSK JSON Payload ------------------------*/
 
     /* The "sjwk" is the signed signing public key */
-    AzureIoTJSONReader_Init( &xJSONReader, ( const uint8_t * ) ucJWSHeader, outJWSHeaderLength );
+    AzureIoTJSONReader_Init( &xJSONReader, ucJWSHeader, outJWSHeaderLength );
 
     if( prvFindJWSValue( &xJSONReader, &xJWKManifestSpan ) != 0 )
     {
